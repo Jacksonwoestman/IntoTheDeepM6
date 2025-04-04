@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 //import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
-//import org.firstinspires.ftc.teamcode.pathing.Dash;
+import org.firstinspires.ftc.teamcode.pathing.Dash;
 import org.firstinspires.ftc.teamcode.pathing.DriveConstants;
 import org.firstinspires.ftc.teamcode.pathing.Odometry;
 import org.firstinspires.ftc.teamcode.pathing.PIDController;
@@ -48,10 +48,10 @@ public class Drive {
 
   public DcMotorEx bR, fR, fL, bL, lEncoder, rEncoder, bEncoder, lVert, rVert, mVert, intake;
 
-  public Servo lHorz, rHorz, intakeArm, outtakeGrab, outtakeWrist, LouttakeArm, RouttakeArm;
+  public Servo lHorz, rHorz, intakeArm, outtakeGrab, outtakeWrist, lOuttakeArm, rOuttakeArm;
   //public CRServo outtakeArm;
   public PIDController pidController;
-  //public Dash dashboard;
+  public Dash dashboard;
   public double outtakeArmTarget;
 
   public boolean outtakeArmIsUp = true;
@@ -62,8 +62,7 @@ public class Drive {
   public void resetStuff() {
     horzSlide(Arms.lHorzInit, Arms.rHorzInit);
     intakeArm.setPosition(Arms.intakeArmInit);
-    LouttakeArm.setPosition(Arms.LouttakeArmInit);
-    RouttakeArm.setPosition(Arms.RouttakeArmInit);
+    outtakeArm(Arms.outtakeArmInit);
     outtakeWrist.setPosition(Arms.outtakeWristInit);
     outtakeGrab.setPosition(Arms.outtakeGrabRelease);
     vertSlide(Arms.vertAfterReset);
@@ -72,8 +71,8 @@ public class Drive {
   public void resetOuttakeExtHorz() {
     horzSlide(Arms.lHorzOut, Arms.rHorzOut);
     intakeArm.setPosition(Arms.intakeArmLaunch);
-    LouttakeArm.setPosition(Arms.LouttakeArmInit);
-    RouttakeArm.setPosition(Arms.RouttakeArmInit);
+    outtakeArm(Arms.outtakeArmInit);
+
     outtakeWrist.setPosition(Arms.outtakeWristInit);
     outtakeGrab.setPosition(Arms.outtakeGrabRelease);
     vertSlide(Arms.vertAfterReset);
@@ -82,16 +81,16 @@ public class Drive {
   public void resetStuffAuto() {
     horzSlide(Arms.lHorzInit, Arms.rHorzInit);
     intakeArm.setPosition(Arms.intakeArmInit);
-    LouttakeArm.setPosition(Arms.LouttakeArmInit);
-    RouttakeArm.setPosition(Arms.RouttakeArmInit);
+    outtakeArm(Arms.outtakeArmInit);
+
     outtakeWrist.setPosition(Arms.outtakeWristInit);
     outtakeGrab.setPosition(Arms.outtakeGrabRelease);
     vertSlide(Arms.vertInit);
 
   }
   public void resetOuttakeStuff() {
-    LouttakeArm.setPosition(Arms.LouttakeArmSpecimenGrab);
-    RouttakeArm.setPosition(Arms.RouttakeArmSpecimenGrab);
+    outtakeArm(Arms.outtakeArmSpecimenGrab);
+
     outtakeWrist.setPosition(Arms.outtakeWristInit);
     outtakeGrab.setPosition(Arms.outtakeGrabRelease);
     vertSlide(Arms.vertBottom);
@@ -100,8 +99,8 @@ public class Drive {
 
   public void onStart() {
     vertSlide(Arms.vertAfterReset);
-    LouttakeArm.setPosition(Arms.LouttakeArmInit);
-    RouttakeArm.setPosition(Arms.RouttakeArmInit);
+    outtakeArm(Arms.outtakeArmInit);
+
   }
 
   public void grabReady() {
@@ -117,22 +116,22 @@ public class Drive {
 
   public void specimenGrab() {
     vertSlide(Arms.vertBottom);
-    LouttakeArm.setPosition(Arms.LouttakeArmSpecimenGrab);
-    RouttakeArm.setPosition(Arms.RouttakeArmSpecimenGrab);
+    outtakeArm(Arms.outtakeArmSpecimenGrab);
+
     outtakeWrist.setPosition(Arms.outtakeWristInit);
   }
 
   public void specimenPlace() {
     vertSlide(Arms.vertSpecimenPlace);
-    LouttakeArm.setPosition(Arms.LouttakeArmSpecimenPlace);
-    RouttakeArm.setPosition(Arms.RouttakeArmSpecimenPlace);
+    outtakeArm(Arms.outtakeArmSpecimenPlace);
+
     outtakeWrist.setPosition(Arms.outtakeWrist180);
   }
 
   public void bucketReady() {
     vertSlide(Arms.vertBucket);
-    LouttakeArm.setPosition(Arms.LouttakeArmBucket);
-    RouttakeArm.setPosition(Arms.RouttakeArmBucket);
+    outtakeArm(Arms.outtakeArmBucket);
+
     outtakeWrist.setPosition(Arms.outtakeWrist180);
   }
 
@@ -141,6 +140,11 @@ public class Drive {
     lVert.setTargetPosition(targetPos);
     mVert.setTargetPosition(targetPos);
     rVert.setTargetPosition(targetPos);
+  }
+
+  public void outtakeArm(double targetPos) {
+    lOuttakeArm.setPosition(targetPos);
+    rOuttakeArm.setPosition(targetPos);
   }
 
 
@@ -159,7 +163,7 @@ public class Drive {
 
   public void horzSlideStick(double stickPos) {
     double lpos = lHorz.getPosition() + 0.0112*stickPos;
-    double rpos = rHorz.getPosition() - 0.0112*stickPos;
+    double rpos = rHorz.getPosition() + 0.0112*stickPos;
     horzSlide(lpos, rpos);
   }
 
@@ -294,9 +298,9 @@ public class Drive {
     lVert = hardwareMap.get(DcMotorEx.class, "LVert");
     mVert = hardwareMap.get(DcMotorEx.class, "MVert");
     rVert = hardwareMap.get(DcMotorEx.class, "RVert");
-    lVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-    rVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-    mVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    lVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    rVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    mVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     mVert.setTargetPosition(0);
     lVert.setTargetPosition(0);
@@ -326,8 +330,8 @@ public class Drive {
 
     intakeArm = hardwareMap.get(Servo.class, "IntakeArm");
 
-    LouttakeArm = hardwareMap.get(Servo.class, "louttakeArm");
-    RouttakeArm = hardwareMap.get(Servo.class, "routtakeArm");
+    lOuttakeArm = hardwareMap.get(Servo.class, "ArmLeft");
+    rOuttakeArm = hardwareMap.get(Servo.class, "ArmRight");
     outtakeWrist = hardwareMap.get(Servo.class, "OuttakeWrist");
     outtakeGrab = hardwareMap.get(Servo.class, "OuttakeGrabber");
 
@@ -340,15 +344,14 @@ public class Drive {
     //outtakeArm.setPower(0);
     outtakeWrist.setPosition(Arms.outtakeWristInit);
     outtakeGrab.setPosition(Arms.outtakeGrabRelease);
-    LouttakeArm.setPosition(Arms.LouttakeArmStart);
-    RouttakeArm.setPosition(Arms.RouttakeArmStart);
+    outtakeArm(Arms.outtakeArmStart);
 
 
 
 
     odometry = new Odometry(initPos);
     pidController = new PIDController();
-    //dashboard = new Dash();
+    dashboard = new Dash();
 
     colorSensor = hardwareMap.get(ColorSensor.class, "cS");
   }

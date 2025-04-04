@@ -126,8 +126,8 @@ public class LeftAutoBasket extends LinearOpMode {
         robot.vertSlide(Arms.vertBucket);
         runList(SubmersibletoPlace);
         leftbucket();
-        robot.LouttakeArm.setPosition(Arms.LouttakeArmBucket);
-        robot.RouttakeArm.setPosition(Arms.RouttakeArmBucket);
+        robot.outtakeArm(Arms.outtakeArmBucket);
+
     }
 
 
@@ -162,8 +162,8 @@ public class LeftAutoBasket extends LinearOpMode {
 
     private void bucketStart() throws InterruptedException {
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
-        robot.LouttakeArm.setPosition(Arms.LouttakeArmBucket);
-        robot.RouttakeArm.setPosition(Arms.RouttakeArmBucket);
+        robot.outtakeArm(Arms.outtakeArmBucket);
+
         Thread.sleep(440);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
         Thread.sleep(150);
@@ -177,8 +177,8 @@ public class LeftAutoBasket extends LinearOpMode {
         //robot.grabReady();
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         Thread.sleep(190);
-        robot.LouttakeArm.setPosition(Arms.LouttakeArmBucket);
-        robot.RouttakeArm.setPosition(Arms.RouttakeArmBucket);
+        robot.outtakeArm(Arms.outtakeArmBucket);
+
         Thread.sleep(440);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
         Thread.sleep(140);
@@ -191,8 +191,8 @@ public class LeftAutoBasket extends LinearOpMode {
         //robot.grabReady();
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         Thread.sleep(190);
-        robot.LouttakeArm.setPosition(Arms.LouttakeArmBucket);
-        robot.RouttakeArm.setPosition(Arms.RouttakeArmBucket);
+        robot.outtakeArm(Arms.outtakeArmBucket);
+
         Thread.sleep(440);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
         Thread.sleep(130);
@@ -203,8 +203,8 @@ public class LeftAutoBasket extends LinearOpMode {
 
     private void leftbucket() throws InterruptedException {
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
-        robot.LouttakeArm.setPosition(Arms.LouttakeArmBucket);
-        robot.RouttakeArm.setPosition(Arms.RouttakeArmBucket);
+        robot.outtakeArm(Arms.outtakeArmBucket);
+
         Thread.sleep(480);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
         Thread.sleep(130);
