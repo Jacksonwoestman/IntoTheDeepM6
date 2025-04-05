@@ -134,7 +134,7 @@ public class M6Tele extends LinearOpMode {
                 if (gamepad1.a) color = 3;
 
                 if (gamepad2.right_trigger > 0.01) {
-                    robot.grab(0.75);
+                    robot.grab(0.85);
                     isGrabbing = true;
                 } else {
                     isGrabbing = false;
@@ -145,7 +145,7 @@ public class M6Tele extends LinearOpMode {
 
 
                 if (gamepad2.left_bumper) robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
-                if (gamepad2.right_bumper) robot.grab(0.5);
+                if (gamepad2.right_bumper) robot.grab(0.65);
 
                 if (gamepad2.dpad_up) {
                     robot.intakeArm.setPosition(Arms.intakeArmLaunch);
@@ -169,7 +169,7 @@ public class M6Tele extends LinearOpMode {
                     //robot.resetStuff();
                     robot.intakeArm.setPosition(Arms.intakeArmInit);
                     if (stillDetectsBlock) {
-                        robot.intake.setPower(0.4);
+                        robot.intake.setPower(0.6);
                     } else {
                         double elapsed = getRuntime() - resetTime;
 
@@ -202,7 +202,7 @@ public class M6Tele extends LinearOpMode {
                 }
 
                 if (isSpecimening) {
-                    if (getRuntime() > 0.5 + specimenTime) {
+                    if (getRuntime() > 0.2 + specimenTime) {
                         robot.specimenPlace();
                         isSpecimening = false;
                     } else if (getRuntime() > specimenTime) {

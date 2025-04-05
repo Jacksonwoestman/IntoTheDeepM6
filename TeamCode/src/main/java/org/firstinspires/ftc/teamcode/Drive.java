@@ -162,8 +162,8 @@ public class Drive {
   }
 
   public void horzSlideStick(double stickPos) {
-    double lpos = lHorz.getPosition() + 0.0112*stickPos;
-    double rpos = rHorz.getPosition() + 0.0112*stickPos;
+    double lpos = lHorz.getPosition() + 0.0125*stickPos;
+    double rpos = rHorz.getPosition() + 0.0125*stickPos;
     horzSlide(lpos, rpos);
   }
 
