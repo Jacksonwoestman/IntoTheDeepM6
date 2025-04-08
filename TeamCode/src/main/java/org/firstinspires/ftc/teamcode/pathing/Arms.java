@@ -8,17 +8,19 @@ public class Arms {
     public static int vertBucket = 2000;
     public static int vertSpecimenPlace = 400;
     public static int vertAfterReset = 400;
-    public static int vertInit = 160;
+    public static int vertInit = 150;
     public static int vertBottom = 0;
+    public static int vertHang = 2000;
+
 
 
     public static double lHorzOut = 0.65;
     public static double rHorzOut = 0.65;
-    public static double lHorzInit = 0.99;
-    public static double rHorzInit = 0.99;
+    public static double lHorzInit = 1;
+    public static double rHorzInit = 1;
 
-    public static double lHorzHalf = 0.75;
-    public static double rHorzHalf = 0.75;
+    public static double lHorzHalf = (lHorzInit - lHorzOut)/2 + lHorzOut;
+    public static double rHorzHalf = (rHorzInit - rHorzOut)/2 + rHorzOut;
 
 
 
@@ -37,15 +39,15 @@ public class Arms {
     public static double outtakeWrist180 = 0.854;
     public static double outtakeWristHalf = 0.5;
 
-    public static double outtakeArmStart = 0.25;
+    public static double outtakeArmStart = 0.25-0.095;
 
-    public static double outtakeArmInit = 0.115;
+    public static double outtakeArmInit = 0.028;
 
-    public static double outtakeArmSpecimenPlace = 0.37;
+    public static double outtakeArmSpecimenPlace = 0.37-0.09;
 
-    public static double outtakeArmBucket = 0.76;
+    public static double outtakeArmBucket = 0.76-0.095;
 
-    public static double outtakeArmSpecimenGrab = 1;
+    public static double outtakeArmSpecimenGrab = 1-0.075;
 
 
 

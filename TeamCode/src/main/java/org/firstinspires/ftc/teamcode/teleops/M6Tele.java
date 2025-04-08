@@ -19,12 +19,28 @@ import java.util.Arrays;
 public class M6Tele extends LinearOpMode {
 
     Drive robot;
-    boolean isResetting = false;
-    double resetTime = 0;
+   ;
+    double Speed;
     int specimen = 0;
     int observe = 0;
     VectorBuilder vB = null;
     boolean isRunningVB = false;
+
+
+    boolean isResetting = false;
+    double resetTime = 0;
+    boolean isResetting2 = false;
+    double resetTime2 = 0;
+    boolean isGrabbing = false;
+    boolean isSpecimening = false;
+    double specimenTime = 0;
+    boolean isLaunching = false;
+    double launchTime = 0;
+
+    float[] hsvValues = new float[3];
+    int colorMatchFrames = 0;
+    final double REQUIRED_MATCH_FRAMES = 0.005;
+    boolean isColorMatch;
 
     private ColorSensor colorSensor;
     private final float[][] COLOR_RANGES = {
@@ -39,18 +55,7 @@ public class M6Tele extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         colorSensor = hardwareMap.get(ColorSensor.class, "cS");
-        float[] hsvValues = new float[3];
         robot = new Drive(hardwareMap, Points.initPoseRight);
-
-        boolean isGrabbing = false;
-        boolean isSpecimening = false;
-        double specimenTime = 0;
-        boolean isLaunching = false;
-        double launchTime = 0;
-        boolean hasSeenBlock = false;
-
-        int colorMatchFrames = 0;
-        final double REQUIRED_MATCH_FRAMES = 0.005;
 
         telemetry.addData("Waiting for start", "...");
         telemetry.update();
@@ -59,6 +64,7 @@ public class M6Tele extends LinearOpMode {
         if (opModeIsActive()) {
             robot.onStart();
             while (opModeIsActive()) {
+
 
                 Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
                 String detectedColor = detectColor(hsvValues);
@@ -70,121 +76,89 @@ public class M6Tele extends LinearOpMode {
                 telemetry.addData("Saturation", hsvValues[1]);
                 telemetry.addData("Value", hsvValues[2]);
 
-                boolean isColorMatch = detectedColor.equals(targetColorString);
+                isColorMatch = detectedColor.equals(targetColorString);
                 if (isColorMatch) {
                     colorMatchFrames++;
                 } else {
                     colorMatchFrames = 0;
                 }
 
-                double Speed = 0.7;
-                if (gamepad1.left_bumper) Speed = 0.4;
-                else if (gamepad1.right_bumper) Speed = 0.7;
-                else Speed = 1;
 
-                double Speed_Rot = -gamepad1.right_stick_x;
-                double Speed_X = -gamepad1.left_stick_x;
-                double Speed_Y = -gamepad1.left_stick_y;
+                drive();
 
-                double fR = Math.min(Math.max(Speed_Y + Speed_X + Speed_Rot, -Speed), Speed);
-                double bR = Math.min(Math.max((Speed_Y - Speed_X) + Speed_Rot, -Speed), Speed);
-                double fL = Math.min(Math.max((Speed_Y - Speed_X) - Speed_Rot, -Speed), Speed);
-                double bL = Math.min(Math.max((Speed_Y + Speed_X) - Speed_Rot, -Speed), Speed);
 
-                if (isRunningVB && !vB.isAtEnd(robot.odometry.currentPos)) {
-                    robot.updateTelemetry();
-                    robot.vecAndStick(vB.getVector(robot.odometry.currentPos), fR, bR, fL, bL);
-                    if (vB.isAtEnd(robot.odometry.currentPos)) isRunningVB = false;
-                    robot.dashboard.update(robot.odometry.currentPos, vB.getVector(robot.odometry.currentPos).targetPos);
-                } else {
-                    robot.setMotorVel(fR, bR, fL, bL);
-                }
-
-                // Auto-reset after color match
-                if (colorMatchFrames >= REQUIRED_MATCH_FRAMES) {
-                    robot.intake.setPower(0);
-                    isGrabbing = false;
-                    if (!hasSeenBlock) {
-                        isResetting = true;
-                        resetTime = getRuntime();
-                    }
-                    hasSeenBlock = true;
-                    isResetting = true;
-                    resetTime = getRuntime();
-                }
-
-                if (gamepad1.b || gamepad2.b) {
-                    isResetting = true;
-                    resetTime = getRuntime();
-                }
-
+                if (gamepad1.b || gamepad2.b) {isResetting = true; resetTime = getRuntime();}
                 if (gamepad2.a && !gamepad2.right_bumper) robot.specimenGrab();
                 if (gamepad2.y) robot.bucketReady();
-                if (gamepad2.x && !gamepad2.right_bumper) {
-                    isSpecimening = true;
-                    specimenTime = getRuntime();
-                }
+                if (gamepad2.x && !gamepad2.right_bumper) {isSpecimening = true; specimenTime = getRuntime();}
 
-                if (gamepad2.b && gamepad2.right_trigger > 0.01) color = 1;
-                if (gamepad2.x && gamepad2.right_trigger > 0.01) color = 2;
-                if (gamepad2.a && gamepad2.right_trigger > 0.01) color = 3;
+                if ((gamepad2.b && gamepad2.right_bumper) || gamepad1.x) color = 1;
+                if ((gamepad2.x && gamepad2.right_bumper) || gamepad1.y) color = 2;
+                if ((gamepad2.a && gamepad2.right_bumper) || gamepad1.a) color = 3;
 
-                if (gamepad1.x) color = 1;
-                if (gamepad1.y) color = 2;
-                if (gamepad1.a) color = 3;
-
-                if (gamepad2.right_trigger > 0.01) {
+                if (gamepad2.right_trigger > 0.05) {
                     robot.grab(0.85);
                     isGrabbing = true;
-                } else {
-                    isGrabbing = false;
                 }
                 if (gamepad2.left_trigger > 0.1) {
                     robot.intake.setPower(-1);
                 }
 
-
                 if (gamepad2.left_bumper) robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
                 if (gamepad2.right_bumper) robot.grab(0.65);
 
-                if (gamepad2.dpad_up) {
-                    robot.intakeArm.setPosition(Arms.intakeArmLaunch);
-                    robot.lHorz.setPosition(Arms.lHorzHalf);
-                    robot.rHorz.setPosition(Arms.rHorzHalf);
-                }
+                if (gamepad2.dpad_up) robot.intake.setPower(0);
+                if (gamepad2.dpad_down && gamepad2.right_stick_button) robot.vertSlide(Arms.vertHang);
 
-                if (gamepad2.dpad_left) robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
-                if (gamepad2.dpad_right) robot.outtakeWrist.setPosition(Arms.outtakeWristInit);
-                if (gamepad2.dpad_down) robot.outtakeWrist.setPosition(Arms.outtakeWristHalf);
-
-                if (gamepad2.right_stick_y != 0) robot.vertSlideStick(gamepad2.right_stick_y);
+                if (gamepad2.right_stick_y != 0 && gamepad2.dpad_down) robot.vertSlideStick(gamepad2.right_stick_y);
                 if (gamepad2.left_stick_y != 0) robot.horzSlideStick(gamepad2.left_stick_y);
                 if (gamepad2.left_stick_button) robot.grabReady();
-                if (gamepad2.right_stick_button) robot.vertSlide(Arms.vertBottom);
+                if (gamepad2.right_stick_button && !gamepad2.dpad_down) robot.grabReadyHalf();
 
+
+
+                if ((colorMatchFrames >= REQUIRED_MATCH_FRAMES) && isGrabbing) {
+                    robot.intake.setPower(0);
+                    isGrabbing = false;
+                    isResetting = true;
+                    resetTime = getRuntime();
+                }
+                
                 if (isResetting) {
-
-                    // Check if we still detect the block
                     boolean stillDetectsBlock = detectColor(hsvValues).equals(targetColorString);
-                    //robot.resetStuff();
-                    robot.intakeArm.setPosition(Arms.intakeArmInit);
-                    if (stillDetectsBlock) {
-                        robot.intake.setPower(0.6);
-                    } else {
-                        double elapsed = getRuntime() - resetTime;
+                    robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
 
-                        if (elapsed > 0.9) {
-                            robot.intakeArm.setPosition(Arms.intakeArmLaunch);
-                            robot.vertSlide(Arms.vertAfterReset);
-                            isResetting = false;
-                            robot.intake.setPower(0);
-                        } else if (elapsed > 0.5) {
-                            robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
-                        } else if (elapsed > 0.1) {
-                            robot.vertSlide(Arms.vertInit);
-                        } else if (elapsed > 0.00001) {
+                    if(stillDetectsBlock) {
+                        if(getRuntime() > 0.2 + resetTime) {
+                            robot.intake.setPower(0.6);
                             robot.resetStuff();
+                        } else {
+                            robot.intakeArm.setPosition(Arms.intakeArmInit);
                         }
+                    } else {
+                        robot.intake.setPower(0.6);
+                        robot.resetStuff();
+                        robot.vertSlide(Arms.vertInit);
+
+                        isResetting2 = true;
+                        resetTime2 = getRuntime();
+                        isResetting = false;
+                    }
+                    
+                }
+                if(isResetting2) {
+                    if (getRuntime() > 0.6 + resetTime2) {
+                        robot.intakeArm.setPosition(Arms.intakeArmLaunch);
+                        robot.vertSlide(Arms.vertAfterReset);
+                        robot.intake.setPower(0);
+                        isResetting = false;
+                        isResetting2 = false;
+                    } else if (getRuntime() > 0.4 + resetTime2) {
+                        robot.intake.setPower(-0.6);
+                    } else if (getRuntime() > 0.15 + resetTime2) {
+                        robot.intake.setPower(0);
+                        robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
+
                     }
                 }
 
@@ -210,13 +184,7 @@ public class M6Tele extends LinearOpMode {
                     }
                 }
 
-                telemetry.addData("Target Color Number", color);
-                telemetry.addData("Vertical Slide Pos", robot.vertSlidePos());
-                telemetry.addData("Current Pos", robot.odometry.currentPos.toString());
-                telemetry.addData("Color Match Frames", colorMatchFrames);
-                telemetry.addData("Is Color Match", isColorMatch);
-                telemetry.addData("Is Grabbing", isGrabbing);
-                telemetry.update();
+                telemetry();
 
                 robot.updateTelemetry();
             }
@@ -234,5 +202,39 @@ public class M6Tele extends LinearOpMode {
             }
         }
         return "Unknown";
+    }
+
+    private void telemetry() {
+        telemetry.addData("Target Color Number", color);
+        telemetry.addData("Vertical Slide Pos", robot.vertSlidePos());
+        telemetry.addData("Current Pos", robot.odometry.currentPos.toString());
+        telemetry.addData("Color Match Frames", colorMatchFrames);
+        telemetry.addData("Is Color Match", isColorMatch);
+        telemetry.addData("Is Grabbing", isGrabbing);
+        telemetry.update();
+    }
+
+    private void drive() {
+        if (gamepad1.left_bumper) Speed = 0.4;
+        else if (gamepad1.right_bumper) Speed = 0.7;
+        else Speed = 1;
+
+        double Speed_Rot = -gamepad1.right_stick_x;
+        double Speed_X = -gamepad1.left_stick_x;
+        double Speed_Y = -gamepad1.left_stick_y;
+
+        double fR = Math.min(Math.max(Speed_Y + Speed_X + Speed_Rot, -Speed), Speed);
+        double bR = Math.min(Math.max((Speed_Y - Speed_X) + Speed_Rot, -Speed), Speed);
+        double fL = Math.min(Math.max((Speed_Y - Speed_X) - Speed_Rot, -Speed), Speed);
+        double bL = Math.min(Math.max((Speed_Y + Speed_X) - Speed_Rot, -Speed), Speed);
+
+        if (isRunningVB && !vB.isAtEnd(robot.odometry.currentPos)) {
+            robot.updateTelemetry();
+            robot.vecAndStick(vB.getVector(robot.odometry.currentPos), fR, bR, fL, bL);
+            if (vB.isAtEnd(robot.odometry.currentPos)) isRunningVB = false;
+            robot.dashboard.update(robot.odometry.currentPos, vB.getVector(robot.odometry.currentPos).targetPos);
+        } else {
+            robot.setMotorVel(fR, bR, fL, bL);
+        }
     }
 }

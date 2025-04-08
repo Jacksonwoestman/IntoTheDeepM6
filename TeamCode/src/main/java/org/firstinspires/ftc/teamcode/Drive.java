@@ -108,6 +108,11 @@ public class Drive {
     intake.setPower(0);
   }
 
+  public void grabReadyHalf() {
+    horzSlide(Arms.lHorzHalf, Arms.rHorzHalf);
+    intake.setPower(0);
+  }
+
   public void grab(double power) {
     intake.setPower(power);
     intakeArm.setPosition(Arms.intakeArmGrab);

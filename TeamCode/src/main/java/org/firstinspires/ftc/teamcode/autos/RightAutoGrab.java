@@ -98,8 +98,7 @@ public class RightAutoGrab extends LinearOpMode {
         //Left Color Stuff
 
         runList(GoLColor1);
-        robot.lHorz.setPosition(Arms.lHorzHalf);
-        robot.rHorz.setPosition(Arms.rHorzHalf);
+        robot.horzSlide(Arms.lHorzHalf, Arms.rHorzHalf);
         robot.intake.setPower(0.5);
         runList(GoLColor2);
         robot.resetOuttakeStuff();
@@ -120,8 +119,7 @@ public class RightAutoGrab extends LinearOpMode {
         outtake();
 
 
-        robot.lHorz.setPosition(Arms.lHorzInit);
-        robot.rHorz.setPosition(Arms.rHorzInit);
+        robot.horzSlide(Arms.lHorzInit, Arms.rHorzInit);
         robot.intakeArm.setPosition(Arms.intakeArmInit);
         Thread.sleep(300);
         runList(PreSpecimenPickupfromR);
@@ -186,8 +184,9 @@ public class RightAutoGrab extends LinearOpMode {
 
     private void intake() throws InterruptedException {
         while(robot.color() == 0) {
-            robot.lHorz.setPosition(Arms.lHorzOut);
-            robot.rHorz.setPosition(Arms.rHorzOut);
+            robot.horzSlide(Arms.lHorzHalf, Arms.rHorzHalf);
+
+
             robot.intake.setPower(0.6);
             robot.intakeArm.setPosition(Arms.intakeArmGrab);
         }
