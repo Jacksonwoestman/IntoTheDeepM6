@@ -7,11 +7,13 @@ public class Points {
     public final static Pos2D initPosLeft = new Pos2D(20, 257, -Math.PI/2);
     public final static Pos2D initPoseRight = new Pos2D(21, 135.5, 2*(Math.PI));
 
-    public final static Pos2D RNeutral = new Pos2D(55,321,-0.36);
-    public final static Pos2D MNeutral = new Pos2D(52.5,332,-0.08);
-    public final static Pos2D LNeutral = new Pos2D(53,324,0.43);
+    public final static Pos2D RNeutral = new Pos2D(52,322,-0.36);
+    public final static Pos2D RNeutralDeliver = new Pos2D(54,318,-0.36);
+    public final static Pos2D MNeutral = new Pos2D(50.5,329,-0.00);
+    //public final static Pos2D MNeutralDeliver = new Pos2D(52.5,336,-0.08);
+    public final static Pos2D LNeutral = new Pos2D(55,319,0.5);
 
-    public final static Pos2D BasketDeliver = new Pos2D(37,317.5,-Math.PI/4);
+    public final static Pos2D BasketDeliver = new Pos2D(42,318.5,-Math.PI/4);
     public final static Pos2D LeftParkStart = new Pos2D(180,300,-(Math.PI*3)/2);
     public final static Pos2D LeftParkEnd = new Pos2D(150,245,-(Math.PI*3)/2);
     public final static Pos2D LeftGrabStart = new Pos2D(180,310,-(Math.PI*3)/2);
@@ -45,14 +47,14 @@ public class Points {
     public final static Pos2D RColorAt = new Pos2D(95,54, ((Math.PI*7)/4));
     public final static Pos2D RColorObserve = new Pos2D(70,52, ((Math.PI*21.5)/16));
 
-    public final static Pos2D LColorAtG = new Pos2D(74.5,90,5.44809);
+    public final static Pos2D LColorAtG = new Pos2D(72,95,5.44809);
     public final static Pos2D LColorObserveG = new Pos2D(65,80,3.6);
     //7/4 = grab
-    public final static Pos2D MColorAtG = new Pos2D(63,69, 5.5562);
+    public final static Pos2D MColorAtG = new Pos2D(67,72, 5.5562);
     public final static Pos2D MColorObserveG = new Pos2D(53,79, 4.086);
 
-    public final static Pos2D RColorAtG = new Pos2D(83,57, 5.308);
-    public final static Pos2D RColorObserveG = new Pos2D(53,70, 4);
+    public final static Pos2D RColorAtG = new Pos2D(80,58, 5.308);
+    public final static Pos2D RColorObserveG = new Pos2D(53,70, 3.8);
 
 
     public final static Pos2D RColor = new Pos2D(93,30, 3*Math.PI);

@@ -26,8 +26,10 @@ public class LeftAutoBasket extends LinearOpMode {
     ArrayList<Pos2D> initToBasket = new ArrayList<>(Arrays.asList(Points.initPosLeft, Points.BasketDeliver));
 
     ArrayList<Pos2D> BasketToRN = new ArrayList<>(Arrays.asList(Points.BasketDeliver, Points.RNeutral));
-    ArrayList<Pos2D> BasketToMN = new ArrayList<>(Arrays.asList(Points.RNeutral, Points.MNeutral));
-    ArrayList<Pos2D> BasketToLN = new ArrayList<>(Arrays.asList(Points.MNeutral, Points.LNeutral));
+    ArrayList<Pos2D> RNToBasket = new ArrayList<>(Arrays.asList(Points.RNeutral, Points.RNeutralDeliver));
+    ArrayList<Pos2D> BasketToMN = new ArrayList<>(Arrays.asList(Points.RNeutralDeliver, Points.MNeutral));
+    ArrayList<Pos2D> MNToBasket = new ArrayList<>(Arrays.asList(Points.MNeutral, Points.RNeutralDeliver));
+    ArrayList<Pos2D> BasketToLN = new ArrayList<>(Arrays.asList(Points.RNeutralDeliver, Points.LNeutral));
     ArrayList<Pos2D> LNToBasket = new ArrayList<>(Arrays.asList(Points.LNeutral, Points.BasketDeliver));
     ArrayList<Pos2D> BasketToGrab = new ArrayList<>(Arrays.asList(Points.BasketDeliver, Points.LeftGrabStart, Points.LeftGrabEnd));
     ArrayList<Pos2D> BasketToPark = new ArrayList<>(Arrays.asList(Points.BasketDeliver, Points.LeftParkStart, Points.LeftParkEnd));
@@ -85,20 +87,24 @@ public class LeftAutoBasket extends LinearOpMode {
 
         bucketStart();
         runList(BasketToRN);
-        robot.intake.setPower(0.5);
+
         intake(0);
 
 
-        rightbucket();
+        robot.vertSlide(Arms.vertBucket);
+        runList(RNToBasket);
+        leftbucket();
 
         runList(BasketToMN);
-        robot.intake.setPower(0.45);
+
         intake(0);
 
         robot.vertSlide(Arms.vertBucket);
-        middlebucket();
+        runList(MNToBasket);
+        leftbucket();
+
         runList(BasketToLN);
-        robot.intake.setPower(0.5);
+
         intake(0);
         robot.vertSlide(Arms.vertBucket);
         runList(LNToBasket);
@@ -108,24 +114,24 @@ public class LeftAutoBasket extends LinearOpMode {
         Thread.sleep(80);
 
         runList(BasketToGrab);
-        intake(350);
+        intake(250);
 
 
 
         robot.vertSlide(Arms.vertBucket);
         runList(SubmersibletoPlace);
-        leftbucket();
+        bucketStart();
 
         robot.resetStuff();
         Thread.sleep(80);
         runList(BasketToGrab);
-        intake(350);
+        intake(250);
 
 
 
         robot.vertSlide(Arms.vertBucket);
         runList(SubmersibletoPlace);
-        leftbucket();
+        bucketStart();
         robot.outtakeArm(Arms.outtakeArmBucket);
 
     }
@@ -139,7 +145,7 @@ public class LeftAutoBasket extends LinearOpMode {
 
         Thread.sleep(time);
 
-        robot.grab(0.8);
+        robot.grab(0.9);
 
         while(robot.color() == 0) {
 
@@ -148,13 +154,14 @@ public class LeftAutoBasket extends LinearOpMode {
         // robot.intake.setPower(0.05);
         robot.intakeArm.setPosition(Arms.intakeArmInit);
         robot.intake.setPower(0.4);
-        robot.resetStuffAuto();
-        Thread.sleep(160);
-        robot.intake.setPower(0.7);
+        robot.horzSlide(Arms.lHorzInit, Arms.rHorzInit);
         Thread.sleep(200);
+        robot.resetStuffAuto();
+        robot.intake.setPower(0.7);
+        Thread.sleep(220);
         robot.intake.setPower(0.4);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
-        Thread.sleep(300);
+        Thread.sleep(270);
         robot.intake.setPower(-0.4);
         robot.intakeArm.setPosition(Arms.intakeArmUp);
 
@@ -163,12 +170,12 @@ public class LeftAutoBasket extends LinearOpMode {
     private void bucketStart() throws InterruptedException {
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         robot.outtakeArm(Arms.outtakeArmBucket);
-
-        Thread.sleep(440);
+        robot.horzSlideFraction(0.45);
+        Thread.sleep(460);
+        robot.intakeArm.setPosition(Arms.intakeArmGrab);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
         Thread.sleep(150);
-        robot.resetOuttakeExtHorz();
-
+        robot.resetOuttakeStuffBasket();
         Thread.sleep(100);
     }
     private void rightbucket() throws InterruptedException {
@@ -182,7 +189,7 @@ public class LeftAutoBasket extends LinearOpMode {
         Thread.sleep(440);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
         Thread.sleep(140);
-        robot.resetOuttakeExtHorz();
+        robot.resetOuttakeStuffBasket();
         Thread.sleep(140);
     }
     private void middlebucket() throws InterruptedException {
@@ -191,26 +198,29 @@ public class LeftAutoBasket extends LinearOpMode {
         //robot.grabReady();
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         Thread.sleep(190);
+        robot.horzSlideFraction(0.45);
         robot.outtakeArm(Arms.outtakeArmBucket);
-
-        Thread.sleep(440);
+        Thread.sleep(510);
+        robot.intakeArm.setPosition(Arms.intakeArmGrab);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
         Thread.sleep(130);
-        robot.resetOuttakeExtHorz();
+        robot.resetOuttakeStuffBasket();
         Thread.sleep(130);
     }
 
 
     private void leftbucket() throws InterruptedException {
+        robot.vertSlide(Arms.vertBucket);
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         robot.outtakeArm(Arms.outtakeArmBucket);
-
-        Thread.sleep(480);
+        robot.horzSlideFraction(0.45);
+        Thread.sleep(490);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
+        robot.intakeArm.setPosition(Arms.intakeArmGrab);
         Thread.sleep(130);
-        robot.resetStuff();
-        Thread.sleep(130);
-
+        robot.resetOuttakeStuffBasket();
+        robot.intake.setPower(0.5);
+        Thread.sleep(100);
     }
     private void runList(ArrayList<Pos2D> runlist) {
         VectorBuilder vB = new VectorBuilder(runlist);

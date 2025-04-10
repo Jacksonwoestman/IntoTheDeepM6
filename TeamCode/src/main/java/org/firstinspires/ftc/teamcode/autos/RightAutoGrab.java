@@ -73,6 +73,7 @@ public class RightAutoGrab extends LinearOpMode {
         telemetry.addData(">", "Touch Play to start OpMode");
         robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
+        robot.outtakeArm(Arms.outtakeArmSpecimenPlace);
         telemetry.update();
 
 
@@ -88,20 +89,20 @@ public class RightAutoGrab extends LinearOpMode {
 
     public void runAutonoumousMode() throws InterruptedException {
         //1st Deliver
-        specimenReadyFirstPlace();
+       // specimenReadyFirstPlace();
         Thread.sleep(250);
 
 
         runListNoWait(StartDeliverSpecimen);
-        robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
+       // robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
 
         //Left Color Stuff
 
         runList(GoLColor1);
-        robot.horzSlide(Arms.lHorzHalf, Arms.rHorzHalf);
+        robot.horzSlideFraction(0.7);
         robot.intake.setPower(0.5);
         runList(GoLColor2);
-        robot.resetOuttakeStuff();
+        //robot.resetOuttakeStuff();
         intake();
 
         runList(GoLColor3);
@@ -147,12 +148,12 @@ public class RightAutoGrab extends LinearOpMode {
     private void observeReadyCycle() throws InterruptedException {
         robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
         Thread.sleep(300);
-        specimenReady();
+       // specimenReady();
 
         runListNoWait(specimen());
 
-        robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
-        robot.specimenGrab();
+       // robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
+       // robot.specimenGrab();
 
         Thread.sleep(100);
         ArrayList<Pos2D> pickup = new ArrayList<>(Arrays.asList(robot.odometry.currentPos, Points.observeGrab));
@@ -184,13 +185,14 @@ public class RightAutoGrab extends LinearOpMode {
 
     private void intake() throws InterruptedException {
         while(robot.color() == 0) {
-            robot.horzSlide(Arms.lHorzHalf, Arms.rHorzHalf);
+            robot.horzSlide(Arms.lHorzOut, Arms.rHorzOut);
 
 
-            robot.intake.setPower(0.6);
+            robot.intake.setPower(0.9);
             robot.intakeArm.setPosition(Arms.intakeArmGrab);
         }
         robot.intake.setPower(0);
+        robot.horzSlideFraction(0.8);
         robot.intakeArm.setPosition(Arms.intakeArmLaunch);
 
     }

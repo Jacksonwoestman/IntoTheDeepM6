@@ -19,7 +19,7 @@ import java.util.Arrays;
 public class M6Tele extends LinearOpMode {
 
     Drive robot;
-   ;
+    ;
     double Speed;
     int specimen = 0;
     int observe = 0;
@@ -89,7 +89,7 @@ public class M6Tele extends LinearOpMode {
 
                 if (gamepad1.b || gamepad2.b) {isResetting = true; resetTime = getRuntime();}
                 if (gamepad2.a && !gamepad2.right_bumper) robot.specimenGrab();
-                if (gamepad2.y) robot.bucketReady();
+                if (gamepad2.y) {robot.bucketReady(); robot.vertSlide(Arms.vertBucket);}
                 if (gamepad2.x && !gamepad2.right_bumper) {isSpecimening = true; specimenTime = getRuntime();}
 
                 if ((gamepad2.b && gamepad2.right_bumper) || gamepad1.x) color = 1;
@@ -107,7 +107,7 @@ public class M6Tele extends LinearOpMode {
                 if (gamepad2.left_bumper) robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
                 if (gamepad2.right_bumper) robot.grab(0.65);
 
-                if (gamepad2.dpad_up) robot.intake.setPower(0);
+                if (gamepad2.dpad_up) {robot.intake.setPower(0); isResetting = false; isResetting2 = false;}
                 if (gamepad2.dpad_down && gamepad2.right_stick_button) robot.vertSlide(Arms.vertHang);
 
                 if (gamepad2.right_stick_y != 0 && gamepad2.dpad_down) robot.vertSlideStick(gamepad2.right_stick_y);
@@ -123,13 +123,13 @@ public class M6Tele extends LinearOpMode {
                     isResetting = true;
                     resetTime = getRuntime();
                 }
-                
+
                 if (isResetting) {
                     boolean stillDetectsBlock = detectColor(hsvValues).equals(targetColorString);
-                    robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
+                    robot.outtakeGrab.setPosition(Arms.outtakeGrabReady);
 
                     if(stillDetectsBlock) {
-                        if(getRuntime() > 0.2 + resetTime) {
+                        if(getRuntime() > 0.225 + resetTime) {
                             robot.intake.setPower(0.6);
                             robot.resetStuff();
                         } else {
@@ -144,21 +144,23 @@ public class M6Tele extends LinearOpMode {
                         resetTime2 = getRuntime();
                         isResetting = false;
                     }
-                    
+
                 }
                 if(isResetting2) {
-                    if (getRuntime() > 0.6 + resetTime2) {
-                        robot.intakeArm.setPosition(Arms.intakeArmLaunch);
-                        robot.vertSlide(Arms.vertAfterReset);
-                        robot.intake.setPower(0);
+                    if(getRuntime() > 1.3 + resetTime2) {
                         isResetting = false;
                         isResetting2 = false;
-                    } else if (getRuntime() > 0.4 + resetTime2) {
-                        robot.intake.setPower(-0.6);
-                    } else if (getRuntime() > 0.15 + resetTime2) {
                         robot.intake.setPower(0);
-                        robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
 
+                    } else if (getRuntime() > 0.8 + resetTime2) {
+                        robot.intakeArm.setPosition(Arms.intakeArmLaunch);
+                        robot.vertSlide(Arms.vertAfterReset);
+                        robot.intake.setPower(-0.3);
+
+                    } else if (getRuntime() > 0.3 + resetTime2) {
+                        robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
+                    } else if (getRuntime() > 0.2 + resetTime2) {
+                        robot.intake.setPower(0);
                     }
                 }
 
@@ -207,6 +209,9 @@ public class M6Tele extends LinearOpMode {
     private void telemetry() {
         telemetry.addData("Target Color Number", color);
         telemetry.addData("Vertical Slide Pos", robot.vertSlidePos());
+        telemetry.addData("LSlide Pos:", robot.lVertSlidePos());
+        telemetry.addData("MSlide Pos:", robot.mVertSlidePos());
+        telemetry.addData("RSlide Pos:", robot.rVertSlidePos());
         telemetry.addData("Current Pos", robot.odometry.currentPos.toString());
         telemetry.addData("Color Match Frames", colorMatchFrames);
         telemetry.addData("Is Color Match", isColorMatch);
