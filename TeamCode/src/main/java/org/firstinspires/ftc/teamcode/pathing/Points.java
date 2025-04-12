@@ -7,16 +7,14 @@ public class Points {
     public final static Pos2D initPosLeft = new Pos2D(20, 257, -Math.PI/2);
     public final static Pos2D initPoseRight = new Pos2D(21, 135.5, 2*(Math.PI));
 
-    public final static Pos2D RNeutral = new Pos2D(52,322,-0.36);
-    public final static Pos2D RNeutralDeliver = new Pos2D(54,318,-0.36);
-    public final static Pos2D MNeutral = new Pos2D(50.5,329,-0.00);
-    //public final static Pos2D MNeutralDeliver = new Pos2D(52.5,336,-0.08);
-    public final static Pos2D LNeutral = new Pos2D(55,319,0.5);
+    public final static Pos2D RNeutral = new Pos2D(51,322,-0.27);
+    public final static Pos2D MNeutral = new Pos2D(48,316,0.18);
+    public final static Pos2D LNeutral = new Pos2D(58,314,0.66);
 
-    public final static Pos2D BasketDeliver = new Pos2D(42,318.5,-Math.PI/4);
+    public final static Pos2D BasketDeliver = new Pos2D(42,314.5,-Math.PI/4);
     public final static Pos2D LeftParkStart = new Pos2D(180,300,-(Math.PI*3)/2);
     public final static Pos2D LeftParkEnd = new Pos2D(150,245,-(Math.PI*3)/2);
-    public final static Pos2D LeftGrabStart = new Pos2D(180,310,-(Math.PI*3)/2);
+    public final static Pos2D LeftGrabStart = new Pos2D(180,320,-(Math.PI*3)/2);
     public final static Pos2D LeftGrabEnd = new Pos2D(150,237,-(Math.PI)/2);
 
     public final static Pos2D WeirdAutoGrab = new Pos2D(68.2,111,3.7579);

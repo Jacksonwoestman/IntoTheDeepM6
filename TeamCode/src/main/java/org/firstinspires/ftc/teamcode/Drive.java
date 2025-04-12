@@ -120,8 +120,8 @@ public class Drive {
     intake.setPower(0);
   }
 
-  public void grab(double power) {
-    intake.setPower(power);
+  public void grab(double Velocity) {
+    intake.setPower(Velocity);
     intakeArm.setPosition(Arms.intakeArmGrab);
   }
 
@@ -143,7 +143,6 @@ public class Drive {
   public void bucketReady() {
     vertSlide(Arms.vertBucket);
     outtakeArm(Arms.outtakeArmBucket);
-
     outtakeWrist.setPosition(Arms.outtakeWrist180);
   }
 
@@ -183,12 +182,13 @@ public class Drive {
   }
 
   public void horzSlideStick(double stickPos) {
-    double lpos = lHorz.getPosition() + 0.0125*stickPos;
-    double rpos = rHorz.getPosition() + 0.0125*stickPos;
+    double lpos = lHorz.getPosition() + 0.02*stickPos;
+    double rpos = rHorz.getPosition() + 0.02*stickPos;
     horzSlide(lpos, rpos);
   }
 
   public void horzSlideFraction(double fraction) {
+    fraction = 1-fraction;
     double lpos = fraction*(Arms.lHorzInit - Arms.lHorzOut) + Arms.lHorzOut;
     double rpos = fraction*(Arms.rHorzInit - Arms.rHorzOut) + Arms.rHorzOut;;
     horzSlide(lpos, rpos);

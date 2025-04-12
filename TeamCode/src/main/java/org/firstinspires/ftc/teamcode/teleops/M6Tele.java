@@ -70,6 +70,9 @@ public class M6Tele extends LinearOpMode {
                 String detectedColor = detectColor(hsvValues);
                 String targetColorString = COLORS[color - 1];
 
+
+
+
                 telemetry.addData("Detected Color", detectedColor);
                 telemetry.addData("Target Color", targetColorString);
                 telemetry.addData("Hue", hsvValues[0]);
@@ -97,7 +100,7 @@ public class M6Tele extends LinearOpMode {
                 if ((gamepad2.a && gamepad2.right_bumper) || gamepad1.a) color = 3;
 
                 if (gamepad2.right_trigger > 0.05) {
-                    robot.grab(0.85);
+                    robot.grab(Arms.intVel1);
                     isGrabbing = true;
                 }
                 if (gamepad2.left_trigger > 0.1) {
@@ -105,7 +108,7 @@ public class M6Tele extends LinearOpMode {
                 }
 
                 if (gamepad2.left_bumper) robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
-                if (gamepad2.right_bumper) robot.grab(0.65);
+                if (gamepad2.right_bumper) robot.grab(600);
 
                 if (gamepad2.dpad_up) {robot.intake.setPower(0); isResetting = false; isResetting2 = false;}
                 if (gamepad2.dpad_down && gamepad2.right_stick_button) robot.vertSlide(Arms.vertHang);
@@ -118,7 +121,6 @@ public class M6Tele extends LinearOpMode {
 
 
                 if ((colorMatchFrames >= REQUIRED_MATCH_FRAMES) && isGrabbing) {
-                    robot.intake.setPower(0);
                     isGrabbing = false;
                     isResetting = true;
                     resetTime = getRuntime();
@@ -127,16 +129,20 @@ public class M6Tele extends LinearOpMode {
                 if (isResetting) {
                     boolean stillDetectsBlock = detectColor(hsvValues).equals(targetColorString);
                     robot.outtakeGrab.setPosition(Arms.outtakeGrabReady);
+                    robot.intake.setPower(Arms.intVel2);
+                    robot.resetStuff();
+
+//Jumbo Josh was here
 
                     if(stillDetectsBlock) {
-                        if(getRuntime() > 0.225 + resetTime) {
-                            robot.intake.setPower(0.6);
-                            robot.resetStuff();
-                        } else {
-                            robot.intakeArm.setPosition(Arms.intakeArmInit);
+                        if(resetTime + Arms.intakeTime1 < getRuntime()) {
+                            robot.intake.setPower(Arms.intVel3);
+
                         }
+
+
                     } else {
-                        robot.intake.setPower(0.6);
+                        robot.intake.setPower(Arms.intVel3);
                         robot.resetStuff();
                         robot.vertSlide(Arms.vertInit);
 
@@ -155,30 +161,33 @@ public class M6Tele extends LinearOpMode {
                     } else if (getRuntime() > 0.8 + resetTime2) {
                         robot.intakeArm.setPosition(Arms.intakeArmLaunch);
                         robot.vertSlide(Arms.vertAfterReset);
-                        robot.intake.setPower(-0.3);
+                        robot.intake.setPower(Arms.intVel2);
+
 
                     } else if (getRuntime() > 0.3 + resetTime2) {
                         robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
+
                     } else if (getRuntime() > 0.2 + resetTime2) {
-                        robot.intake.setPower(0);
+                        robot.intake.setPower(Arms.intVel4);
+
                     }
                 }
 
-                if (isLaunching) {
+              /*  if (isLaunching) {
                     if (getRuntime() > 1.6 + launchTime) {
-                        robot.intake.setPower(0);
+                        robot.intake.setVelocity(0);
                         isLaunching = false;
                     } else if (getRuntime() > 0.8 + launchTime) {
                         robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
-                        robot.intake.setPower(1);
+                        robot.intake.setVelocty(1);
                     } else if (getRuntime() > launchTime) {
                         robot.resetStuff();
                         robot.intakeArm.setPosition(Arms.intakeArmLaunch);
                     }
-                }
+                }*/
 
                 if (isSpecimening) {
-                    if (getRuntime() > 0.2 + specimenTime) {
+                    if (getRuntime() > 0.4 + specimenTime) {
                         robot.specimenPlace();
                         isSpecimening = false;
                     } else if (getRuntime() > specimenTime) {
