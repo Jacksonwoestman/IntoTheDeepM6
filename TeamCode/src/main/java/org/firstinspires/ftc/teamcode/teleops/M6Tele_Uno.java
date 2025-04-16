@@ -15,11 +15,10 @@ import org.firstinspires.ftc.teamcode.pathing.VectorBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-@TeleOp(name = "M2 Teleop")
-public class M6Tele extends LinearOpMode {
-
+@TeleOp(name = "M2 Teleop Uno")
+public class M6Tele_Uno extends LinearOpMode {
     Drive robot;
-    ;
+
     double Speed;
     int specimen = 0;
     int observe = 0;
@@ -123,7 +122,7 @@ public class M6Tele extends LinearOpMode {
                 if (gamepad2.dpad_down && gamepad2.right_stick_button) robot.vertSlide(Arms.vertHang);
 
                 if (gamepad2.right_stick_y != 0 && gamepad2.dpad_down) robot.vertSlideStick(gamepad2.right_stick_y);
-                if (gamepad2.left_stick_y != 0) robot.horzSlideStick(gamepad2.left_stick_y);
+                if (gamepad2.left_stick_y != 0 && gamepad2.dpad_down) robot.horzSlideStick(gamepad2.left_stick_y);
                 if (gamepad2.left_stick_button) robot.grabReady();
                 if (gamepad2.right_stick_button && !gamepad2.dpad_down) robot.grabReadyHalf();
 
@@ -193,7 +192,7 @@ public class M6Tele extends LinearOpMode {
                     robot.intake.setPower(0);
                     robot.resetStuff();
                     isResettingforSpecimen = false;
-                    }
+                }
 
 
               /*  if (isLaunching) {
@@ -252,14 +251,14 @@ public class M6Tele extends LinearOpMode {
     }
 
     private void drive() {
-        if (gamepad1.left_bumper) Speed = 0.4;
-        else if (gamepad1.right_bumper) Speed = 0.7;
-        else Speed = 1;
+        Speed = 1;
 
-        double Speed_Rot = -gamepad1.right_stick_x;
-        double Speed_X = -gamepad1.left_stick_x;
-        double Speed_Y = -gamepad1.left_stick_y;
-
+        double Speed_Rot = 0, Speed_X = 0, Speed_Y = 0;
+        if(!gamepad2.dpad_down) {
+            Speed_Rot = -gamepad2.right_stick_x;
+            Speed_X = -gamepad2.left_stick_x;
+            Speed_Y = -gamepad2.left_stick_y;
+        }
         double fR = Math.min(Math.max(Speed_Y + Speed_X + Speed_Rot, -Speed), Speed);
         double bR = Math.min(Math.max((Speed_Y - Speed_X) + Speed_Rot, -Speed), Speed);
         double fL = Math.min(Math.max((Speed_Y - Speed_X) - Speed_Rot, -Speed), Speed);

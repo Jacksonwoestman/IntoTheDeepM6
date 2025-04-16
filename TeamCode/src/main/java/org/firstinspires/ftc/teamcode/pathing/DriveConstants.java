@@ -40,7 +40,7 @@ public class DriveConstants {
 
   public static double powerBegin = 0.85;
   public static double powerMax = 1;
-  public static double powerEnd = -0.35;
+  public static double powerEnd = -0.15;
 }
 
 

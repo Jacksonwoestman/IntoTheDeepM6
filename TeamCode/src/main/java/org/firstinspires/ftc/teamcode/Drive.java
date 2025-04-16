@@ -125,6 +125,11 @@ public class Drive {
     intakeArm.setPosition(Arms.intakeArmGrab);
   }
 
+  public void grabSpecimen(double Velocity) {
+    intake.setPower(Velocity);
+    intakeArm.setPosition(Arms.intakeArmGrab);
+  }
+
 
   public void specimenGrab() {
     vertSlide(Arms.vertBottom);

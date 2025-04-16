@@ -135,7 +135,7 @@ public class LeftAutoBasket extends LinearOpMode {
         runList(SubmersibletoPlace);
         bucketStart();
         robot.outtakeArm(Arms.outtakeArmBucket);
-
+        robot.horzSlide(Arms.lHorzInit,Arms.rHorzInit);
         runList(BasketToPark);
 
     }
@@ -148,7 +148,7 @@ public class LeftAutoBasket extends LinearOpMode {
         robot.outtakeArm(Arms.outtakeArmInit);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
 
-        robot.grab(0.78);
+        robot.grab(0.7);
         Thread.sleep(100);
         robot.horzSlide(Arms.lHorzOut, Arms.rHorzOut);
 
@@ -156,25 +156,29 @@ public class LeftAutoBasket extends LinearOpMode {
 
         resetTime = getRuntime();
         boolean sad = false;
-        while(robot.color() == 0 && !sad) {
-            if(getRuntime() > resetTime + 3) {sad = true;}
+        while(robot.color() != 2 && !sad) {
+            if(getRuntime() > resetTime + 4) {
+                sad = true;
+            } else if(getRuntime() > resetTime + 2) {
+                robot.setMotorVel(-0.15, -0.15, 0.15, 0.15);
+            }
         }
         if(!sad) {
             resetTime = getRuntime();
             robot.resetStuff();
-            robot.intake.setPower(0.43);
+            robot.intake.setPower(0.5);
             robot.intakeArm.setPosition(Arms.intakeArmInit);
 
 
-            while (robot.color() != 0) {
+            while (robot.color() == 2) {
 
             }
             Thread.sleep(100);
 
-            robot.intake.setPower(0.53);
+            robot.intake.setPower(0.52);
             robot.vertSlide(Arms.vertInitAuto);
 
-            Thread.sleep(300);
+            Thread.sleep(200);
             robot.intake.setPower(0.2);
             robot.outtakeGrab.setPosition(Arms.outtakeGrabReady);
 
@@ -194,11 +198,12 @@ public class LeftAutoBasket extends LinearOpMode {
 
 
 
+
     private void bucketStart() throws InterruptedException {
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         robot.outtakeArm(Arms.outtakeArmBucket);
         robot.horzSlideFraction(0.45);
-        Thread.sleep(460);
+        Thread.sleep(420);
         robot.intakeArm.setPosition(Arms.intakeArmGrab);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
         Thread.sleep(150);
@@ -212,9 +217,11 @@ public class LeftAutoBasket extends LinearOpMode {
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         robot.outtakeArm(Arms.outtakeArmBucket);
         robot.horzSlideFraction(0.30);
-        Thread.sleep(550);
+        Thread.sleep(500);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
         robot.intakeArm.setPosition(Arms.intakeArmGrab);
+        Thread.sleep(120);
+        robot.outtakeArm(Arms.outtakeArmSpecimenPlace);
         Thread.sleep(100);
         robot.resetOuttakeStuffBasket();
 
