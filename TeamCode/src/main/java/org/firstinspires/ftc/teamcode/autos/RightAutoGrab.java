@@ -72,7 +72,7 @@ public class RightAutoGrab extends LinearOpMode {
 
         telemetry.addData(">", "Touch Play to start OpMode");
         robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
-        robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
+       // robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         telemetry.update();
 
 
@@ -102,7 +102,7 @@ public class RightAutoGrab extends LinearOpMode {
         robot.rHorz.setPosition(Arms.rHorzHalf);
         robot.intake.setPower(0.5);
         runList(GoLColor2);
-        robot.resetOuttakeStuff();
+       // robot.resetOuttakeStuff();
         intake();
 
         runList(GoLColor3);

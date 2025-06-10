@@ -59,7 +59,7 @@ public class LeftAutoBasket extends LinearOpMode {
         robot.bEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
-        robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
+        //robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         //robot.intakeArm1.setPosition(Arms/*.intakeArm1SpecimenTransfer);
         //robot.grabSpecimen(Points.SpecimenGrab);
         telemetry.addData(">", "Touch Play to start OpMode");
@@ -161,7 +161,7 @@ public class LeftAutoBasket extends LinearOpMode {
     }
 
     private void bucketStart() throws InterruptedException {
-        robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
+        //robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         robot.outtakeArm(Arms.outtakeArmBucket);
 
         Thread.sleep(440);
@@ -175,7 +175,7 @@ public class LeftAutoBasket extends LinearOpMode {
         robot.vertSlide(Arms.vertBucket);
         Thread.sleep(190);
         //robot.grabReady();
-        robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
+        //robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         Thread.sleep(190);
         robot.outtakeArm(Arms.outtakeArmBucket);
 
@@ -189,7 +189,7 @@ public class LeftAutoBasket extends LinearOpMode {
         robot.vertSlide(Arms.vertBucket);
         Thread.sleep(190);
         //robot.grabReady();
-        robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
+        //robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         Thread.sleep(190);
         robot.outtakeArm(Arms.outtakeArmBucket);
 
@@ -202,7 +202,7 @@ public class LeftAutoBasket extends LinearOpMode {
 
 
     private void leftbucket() throws InterruptedException {
-        robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
+       // robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         robot.outtakeArm(Arms.outtakeArmBucket);
 
         Thread.sleep(480);

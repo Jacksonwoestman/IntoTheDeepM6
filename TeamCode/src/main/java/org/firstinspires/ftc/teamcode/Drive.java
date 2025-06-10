@@ -82,14 +82,21 @@ public class Drive {
     horzSlide(Arms.lHorzInit, Arms.rHorzInit);
     intakeArm.setPosition(Arms.intakeArmInit);
     outtakeArm(Arms.outtakeArmInit);
-
     outtakeWrist.setPosition(Arms.outtakeWristInit);
     outtakeGrab.setPosition(Arms.outtakeGrabRelease);
     vertSlide(Arms.vertInit);
 
   }
-  public void resetOuttakeStuff() {
+  public void resetOuttakeStuffSpecimen() {
     outtakeArm(Arms.outtakeArmSpecimenGrab);
+
+    outtakeWrist.setPosition(Arms.outtakeWristInit);
+    outtakeGrab.setPosition(Arms.outtakeGrabRelease);
+    vertSlide(Arms.vertBottom);
+
+  }
+  public void resetOuttakeStuffBasket() {
+    outtakeArm(Arms.outtakeArmInit);
 
     outtakeWrist.setPosition(Arms.outtakeWristInit);
     outtakeGrab.setPosition(Arms.outtakeGrabRelease);
@@ -108,8 +115,18 @@ public class Drive {
     intake.setPower(0);
   }
 
-  public void grab(double power) {
-    intake.setPower(power);
+  public void grabReadyHalf() {
+    horzSlide(Arms.lHorzHalf, Arms.rHorzHalf);
+    intake.setPower(0);
+  }
+
+  public void grab(double Velocity) {
+    intake.setPower(Velocity);
+    intakeArm.setPosition(Arms.intakeArmGrab);
+  }
+
+  public void grabSpecimen(double Velocity) {
+    intake.setPower(Velocity);
     intakeArm.setPosition(Arms.intakeArmGrab);
   }
 
@@ -131,7 +148,6 @@ public class Drive {
   public void bucketReady() {
     vertSlide(Arms.vertBucket);
     outtakeArm(Arms.outtakeArmBucket);
-
     outtakeWrist.setPosition(Arms.outtakeWrist180);
   }
 
@@ -151,6 +167,15 @@ public class Drive {
   public int vertSlidePos() {
     return (int) ((lVert.getCurrentPosition() + rVert.getCurrentPosition()) / 2);
   }
+  public int lVertSlidePos() {
+    return (int) ((lVert.getCurrentPosition() + lVert.getCurrentPosition()) / 2);
+  }
+  public int mVertSlidePos() {
+    return (int) ((mVert.getCurrentPosition() + mVert.getCurrentPosition()) / 2);
+  }
+  public int rVertSlidePos() {
+    return (int) ((rVert.getCurrentPosition() + rVert.getCurrentPosition()) / 2);
+  }
 
 
 
@@ -162,10 +187,18 @@ public class Drive {
   }
 
   public void horzSlideStick(double stickPos) {
-    double lpos = lHorz.getPosition() + 0.0125*stickPos;
-    double rpos = rHorz.getPosition() + 0.0125*stickPos;
+    double lpos = lHorz.getPosition() + 0.02*stickPos;
+    double rpos = rHorz.getPosition() + 0.02*stickPos;
     horzSlide(lpos, rpos);
   }
+
+  public void horzSlideFraction(double fraction) {
+    fraction = 1-fraction;
+    double lpos = fraction*(Arms.lHorzInit - Arms.lHorzOut) + Arms.lHorzOut;
+    double rpos = fraction*(Arms.rHorzInit - Arms.rHorzOut) + Arms.rHorzOut;;
+    horzSlide(lpos, rpos);
+  }
+
 
   public void vertSlideStick(double stickPos) {
     vertSlide(vertSlidePos() - (int)(200*stickPos));
@@ -315,9 +348,9 @@ public class Drive {
     mVert.setDirection(DcMotorSimple.Direction.REVERSE);
     rVert.setDirection(DcMotorSimple.Direction.REVERSE);
 
-    mVert.setPower(1);
-    lVert.setPower(1);
-    rVert.setPower(1);
+    mVert.setVelocity(2700);
+    lVert.setVelocity(2700);
+    rVert.setVelocity(2700);
 
 
     intake = hardwareMap.get(DcMotorEx.class, "Intake");
