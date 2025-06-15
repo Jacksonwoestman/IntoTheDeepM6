@@ -90,6 +90,10 @@ public class M6Tele_Uno extends LinearOpMode {
 
                 drive();
 
+                if(gamepad1.dpad_up) {Arms.vertSpecimenPlace += 1;}
+                if(gamepad1.dpad_down) {Arms.vertSpecimenPlace -= 1;}
+
+
 
                 if (gamepad1.b || gamepad2.b) {isResetting = true; resetTime = getRuntime();}
                 if (gamepad2.a && !gamepad2.right_bumper) robot.specimenGrab();
@@ -191,6 +195,7 @@ public class M6Tele_Uno extends LinearOpMode {
 
                     robot.intake.setPower(0);
                     robot.resetStuff();
+                    robot.intakeArm.setPosition(Arms.intakeArmLaunch);
                     isResettingforSpecimen = false;
                 }
 

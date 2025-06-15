@@ -151,6 +151,12 @@ public class Drive {
     outtakeWrist.setPosition(Arms.outtakeWrist180);
   }
 
+  public void bucketReady(int bucketPos) {
+    vertSlide(bucketPos);
+    outtakeArm(Arms.outtakeArmBucket);
+    outtakeWrist.setPosition(Arms.outtakeWrist180);
+  }
+
 
   public void vertSlide(int targetPos) {
     lVert.setTargetPosition(targetPos);

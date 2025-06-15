@@ -39,6 +39,7 @@ public class LeftAutoBasket extends LinearOpMode {
 
     boolean isResetting = false;
     double resetTime = 0;
+    boolean sad = false;
 
 
 
@@ -131,12 +132,16 @@ public class LeftAutoBasket extends LinearOpMode {
 */
 
 
+        if(!sad) {
+
         robot.vertSlide(Arms.vertBucket);
         runList(SubmersibletoPlace);
         bucketStart();
-        robot.outtakeArm(Arms.outtakeArmBucket);
+        robot.outtakeArm(Arms.outtakeArmPark);
         robot.horzSlide(Arms.lHorzInit,Arms.rHorzInit);
-        runList(BasketToPark);
+        runList(BasketToPark);} else {
+            runList(new ArrayList<>(Arrays.asList(robot.odometry.currentPos, Points.LeftParkEnd)));
+        }
 
     }
 
@@ -145,17 +150,21 @@ public class LeftAutoBasket extends LinearOpMode {
 
 
     private void intake(int time) throws InterruptedException {
-        robot.outtakeArm(Arms.outtakeArmInit);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
+        robot.outtakeArm(Arms.outtakeArmInit + 150);
+
 
         robot.grab(0.7);
         Thread.sleep(100);
         robot.horzSlide(Arms.lHorzOut, Arms.rHorzOut);
 
+
         //Thread.sleep(time);
 
         resetTime = getRuntime();
-        boolean sad = false;
+        sad = false;
+        robot.outtakeArm(Arms.outtakeArmInit);
+
         while(robot.color() != 2 && !sad) {
             if(getRuntime() > resetTime + 4) {
                 sad = true;
@@ -164,15 +173,25 @@ public class LeftAutoBasket extends LinearOpMode {
             }
         }
         if(!sad) {
+            robot.intake.setPower(0.4);
             resetTime = getRuntime();
             robot.resetStuff();
-            robot.intake.setPower(0.5);
+            Thread.sleep(100);
+            robot.intake.setPower(0.6);
             robot.intakeArm.setPosition(Arms.intakeArmInit);
 
 
             while (robot.color() == 2) {
-
+                if(getRuntime() > resetTime + 2.5) {
+                    robot.intake.setPower(-1);
+                    sad = true;
+                } else if(getRuntime() > resetTime + 1) {
+                    robot.intake.setPower(1);
+                }
+                if(getRuntime() > resetTime + 4) sad = true;
             }
+
+            if(!sad) {
             Thread.sleep(100);
 
             robot.intake.setPower(0.52);
@@ -190,8 +209,13 @@ public class LeftAutoBasket extends LinearOpMode {
             robot.vertSlide(Arms.vertAfterReset);
             robot.intake.setPower(-1);
             Thread.sleep(200);
-            robot.intake.setPower(0);
-        } else {robot.resetStuff();}
+            robot.intake.setPower(0);}
+            else {
+                robot.intake.setPower(-1);
+                robot.resetStuff();}
+        } else {
+            robot.intake.setPower(-1);
+            robot.resetStuff();}
 
 
     }
@@ -203,7 +227,7 @@ public class LeftAutoBasket extends LinearOpMode {
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         robot.outtakeArm(Arms.outtakeArmBucket);
         robot.horzSlideFraction(0.45);
-        Thread.sleep(420);
+        Thread.sleep(600);
         robot.intakeArm.setPosition(Arms.intakeArmGrab);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
         Thread.sleep(150);
@@ -217,7 +241,7 @@ public class LeftAutoBasket extends LinearOpMode {
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         robot.outtakeArm(Arms.outtakeArmBucket);
         robot.horzSlideFraction(0.30);
-        Thread.sleep(500);
+        Thread.sleep(700);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
         robot.intakeArm.setPosition(Arms.intakeArmGrab);
         Thread.sleep(120);

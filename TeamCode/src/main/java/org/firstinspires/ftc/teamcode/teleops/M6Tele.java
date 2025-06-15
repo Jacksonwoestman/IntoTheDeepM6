@@ -4,6 +4,7 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Drive;
 import org.firstinspires.ftc.teamcode.pathing.Arms;
@@ -25,6 +26,8 @@ public class M6Tele extends LinearOpMode {
     int observe = 0;
     VectorBuilder vB = null;
     boolean isRunningVB = false;
+
+    int bucketPos = Arms.vertBucket;
 
 
     boolean isResetting = false;
@@ -91,11 +94,18 @@ public class M6Tele extends LinearOpMode {
 
                 drive();
 
-
+                if (gamepad1.dpad_up) {}
                 if (gamepad1.b || gamepad2.b) {isResetting = true; resetTime = getRuntime();}
                 if (gamepad2.a && !gamepad2.right_bumper) robot.specimenGrab();
-                if (gamepad2.y) {robot.bucketReady(); robot.vertSlide(Arms.vertBucket);}
+                if (gamepad2.y && !isResetting && !isResetting2) {robot.bucketReady(bucketPos); robot.vertSlide(Arms.vertBucket);}
                 if (gamepad2.x && !gamepad2.right_bumper) {isSpecimening = true; specimenTime = getRuntime();}
+
+                if(gamepad1.left_trigger > 0.1) {
+                    bucketPos = 725;
+                }
+                if(gamepad1.right_trigger >0.1) {
+                    bucketPos = Arms.vertBucket;
+                }
 
                 if ((gamepad2.b && gamepad2.right_bumper) || gamepad1.x) color = 1;
                 if ((gamepad2.x && gamepad2.right_bumper) || gamepad1.y) color = 2;
@@ -126,6 +136,20 @@ public class M6Tele extends LinearOpMode {
                 if (gamepad2.left_stick_y != 0) robot.horzSlideStick(gamepad2.left_stick_y);
                 if (gamepad2.left_stick_button) robot.grabReady();
                 if (gamepad2.right_stick_button && !gamepad2.dpad_down) robot.grabReadyHalf();
+
+                if(gamepad1.dpad_up) {
+                    robot.mVert.setTargetPosition(Arms.vertInit);
+                    robot.lVert.setTargetPosition(Arms.vertInit);
+                    robot.rVert.setTargetPosition(Arms.vertInit);
+                    robot.mVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.lVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.rVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.lVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.rVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.mVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+                }
 
 
 
@@ -168,21 +192,21 @@ public class M6Tele extends LinearOpMode {
 
                 }
                 if(isResetting2) {
-                    if(getRuntime() > 1.3 + resetTime2) {
+                    if(getRuntime() > 1 + resetTime2) {
                         isResetting = false;
                         isResetting2 = false;
                         robot.intake.setPower(0);
 
-                    } else if (getRuntime() > 0.8 + resetTime2) {
+                    } else if (getRuntime() > 0.5 + resetTime2) {
                         robot.intakeArm.setPosition(Arms.intakeArmLaunch);
                         robot.vertSlide(Arms.vertAfterReset);
                         robot.intake.setPower(Arms.intVel2);
 
 
-                    } else if (getRuntime() > 0.3 + resetTime2) {
+                    } else if (getRuntime() > 0.2 + resetTime2) {
                         robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
 
-                    } else if (getRuntime() > 0.2 + resetTime2) {
+                    } else if (getRuntime() > 0.1 + resetTime2) {
                         robot.intake.setPower(Arms.intVel4);
 
                     }
@@ -192,6 +216,7 @@ public class M6Tele extends LinearOpMode {
 
                     robot.intake.setPower(0);
                     robot.resetStuff();
+                    robot.intakeArm.setPosition(Arms.intakeArmLaunch);
                     isResettingforSpecimen = false;
                     }
 

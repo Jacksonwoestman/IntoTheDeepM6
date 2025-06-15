@@ -1,12 +1,9 @@
 package org.firstinspires.ftc.teamcode.autos;
 
 
-import android.widget.GridLayout;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.teamcode.Drive;
 import org.firstinspires.ftc.teamcode.pathing.Points;
@@ -19,13 +16,11 @@ import org.firstinspires.ftc.teamcode.pathing.VectorBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-@Disabled
-@Autonomous(name = "RightAuto")
-public class RightAutoGrab extends LinearOpMode {
+@Autonomous(name = "RightAuto4")
+public class RightAuto4 extends LinearOpMode {
     Drive robot;
     int numTimesSpecimen = 0;
-
-
+    int specimenGrab = 0;
 
 
 
@@ -33,20 +28,30 @@ public class RightAutoGrab extends LinearOpMode {
 
     ArrayList<Pos2D> StartDeliverSpecimen = new ArrayList<>(Arrays.asList(Points.initPoseRight, Points.RSpecimenDeliver));
 
-    ArrayList<Pos2D> GoLColor1 = new ArrayList<>(Arrays.asList(Points.RSpecimenDeliver, Points.RSpecimenPreDeliver));
-    ArrayList<Pos2D> GoLColor2 = new ArrayList<>(Arrays.asList(Points.RSpecimenPreDeliver, Points.LColorAtG));
-    ArrayList<Pos2D> GoLColor3 = new ArrayList<>(Arrays.asList(Points.LColorAtG, Points.LColorObserveG));
+    ArrayList<Pos2D> GoLColor2 = new ArrayList<>(Arrays.asList(Points.LColor1, Points.LColor3,Points.LColor5));
+    ArrayList<Pos2D> GoLColor1 = new ArrayList<>(Arrays.asList(Points.RSpecimenDeliver, Points.LColor1));
+    // ArrayList<Pos2D> GoLColor2 = new ArrayList<>(Arrays.asList(Points.LColor1, Points.LColor2));
+    //ArrayList<Pos2D> GoLColor3 = new ArrayList<>(Arrays.asList(Points.LColor2, Points.LColor3));
+    ArrayList<Pos2D> GoMColor1 = new ArrayList<>(Arrays.asList(Points.LColor5, Points.MColor1));
 
-    ArrayList<Pos2D> GoMColor1 = new ArrayList<>(Arrays.asList(Points.LColorObserveG, Points.MColorAtG));
-    ArrayList<Pos2D> GoMColor2 = new ArrayList<>(Arrays.asList(Points.MColorAtG, Points.MColorObserveG));
+    ArrayList<Pos2D> GoMColor2 = new ArrayList<>(Arrays.asList(Points.MColor1, Points.MColor3, Points.MColor5));
 
-    ArrayList<Pos2D> GoRColor1 = new ArrayList<>(Arrays.asList(Points.MColorObserveG, Points.RColorAtG));
-    ArrayList<Pos2D> GoRColor2 = new ArrayList<>(Arrays.asList(Points.RColorAtG, Points.RColorObserveG));
+    // ArrayList<Pos2D> GoMColor1 = new ArrayList<>(Arrays.asList(Points.LColor3, Points.MColor1));
+    ArrayList<Pos2D> GoRColor = new ArrayList<>(Arrays.asList(Points.MColor5, Points.RColor1));
 
-    ArrayList<Pos2D> PreSpecimenPickupfromR = new ArrayList<>(Arrays.asList(Points.RColorObserveG, Points.PreobserveGrab));
+    ArrayList<Pos2D> GoRColor1 = new ArrayList<>(Arrays.asList(Points.RColor1,Points.RColor3, Points.RColor5));
+
+    // ArrayList<Pos2D> GoRColor1 = new ArrayList<>(Arrays.asList(Points.MColor2, Points.RColor1));
+   // ArrayList<Pos2D> GoRColor2 = new ArrayList<>(Arrays.asList(Points.RColor1, Points.RColor2));
+
+    ArrayList<Pos2D> PreSpecimenPickupfromR = new ArrayList<>(Arrays.asList(Points.MColor5, Points.PreobserveGrab));
     ArrayList<Pos2D> SpecimenPickupfromR = new ArrayList<>(Arrays.asList(Points.PreobserveGrab, Points.observeGrab));
     ArrayList<Pos2D> SpecimenDeliver= new ArrayList<>(Arrays.asList(Points.observeGrab, Points.RSpecimenPreDeliver));
     ArrayList<Pos2D> SpecimenPickup = new ArrayList<>(Arrays.asList(Points.RSpecimenDeliver, Points.observeGrab));
+    ArrayList<Pos2D> SpecimenPickup1 = new ArrayList<>(Arrays.asList(Points.RColor5, Points.observeGrabR));
+    ArrayList<Pos2D> SpecimenDeliver1 = new ArrayList<>(Arrays.asList(Points.observeGrabR, Points.RSpecimenDeliver));
+
+
 
     boolean isSpecimenPlacing = false;
 
@@ -91,41 +96,32 @@ public class RightAutoGrab extends LinearOpMode {
     public void runAutonoumousMode() throws InterruptedException {
         //1st Deliver
         specimenReadyFirstPlace();
-        Thread.sleep(250);
+        Thread.sleep(200);
 
 
         runListNoWait(StartDeliverSpecimen);
+        Thread.sleep(50);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
 
         //Left Color Stuff
+        robot.resetOuttakeStuffSpecimen();
 
         runList(GoLColor1);
-        robot.horzSlideFraction(0.7);
-        robot.intake.setPower(0.5);
         runList(GoLColor2);
-        robot.resetOuttakeStuffSpecimen();
-        intake();
 
-        runList(GoLColor3);
-        outtake();
-        robot.intake.setPower(0.5);
-        runList(GoMColor1);
-        intake();
+       // runList(GoLColor3);
 
+        //runList(GoMColor1);
         runList(GoMColor2);
-        outtake();
-        robot.intake.setPower(0.5);
-        runList(GoRColor1);
-        intake();
-        runList(GoRColor2);
-        outtake();
+
+        //runListNoWait(GoRColor);
+
+        //runList(GoRColor1);
 
 
-        robot.horzSlide(Arms.lHorzInit, Arms.rHorzInit);
-        robot.intakeArm.setPosition(Arms.intakeArmInit);
-        Thread.sleep(300);
-        runList(PreSpecimenPickupfromR);
         Thread.sleep(100);
+        runList(PreSpecimenPickupfromR);
+
         runList(SpecimenPickupfromR);
 
 
@@ -148,23 +144,28 @@ public class RightAutoGrab extends LinearOpMode {
 
     private void observeReadyCycle() throws InterruptedException {
         robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
-        Thread.sleep(300);
-       specimenReady();
+        Thread.sleep(315);
+        specimenReady();
 
         runListNoWait(specimen());
 
-       robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
-       robot.specimenGrab();
+        robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
+        robot.specimenGrab();
 
         Thread.sleep(100);
-        ArrayList<Pos2D> pickup = new ArrayList<>(Arrays.asList(robot.odometry.currentPos, Points.observeGrab));
+        specimenGrab++;
+        Pos2D targetPos = new Pos2D(Points.observeGrab.x-0.75 * specimenGrab, Points.observeGrab.y, Points.observeGrab.theta);
+
+        ArrayList<Pos2D> pickup = new ArrayList<>(Arrays.asList(robot.odometry.currentPos, targetPos));
         runList(pickup);
     }
 
 
+
+
     private ArrayList<Pos2D> specimen() throws InterruptedException {
         specimen += 5;
-        Pos2D targetPos = new Pos2D(Points.RSpecimenDeliver.x+2, Points.RSpecimenDeliver.y -10, Points.RSpecimenDeliver.theta);
+        Pos2D targetPos = new Pos2D(Points.RSpecimenDeliver.x+2, Points.RSpecimenDeliver.y -8, Points.RSpecimenDeliver.theta);
 
         ArrayList<Pos2D> observeToSpecimen = new ArrayList<>(Arrays.asList(Points.observeGrab, Points.RSpecimenPreDeliver, targetPos));
 
@@ -209,11 +210,13 @@ public class RightAutoGrab extends LinearOpMode {
 
 
     private void runList(ArrayList<Pos2D> runlist) {
+        boolean isFollowing = false;
         VectorBuilder vB = new VectorBuilder(runlist);
         robot.dashboard.addVectors(vB.vectors);
         while (!vB.isAtEnd(robot.odometry.currentPos)) {
             robot.updateTelemetry();
             robot.runVec(vB.getVector(robot.odometry.currentPos));
+
             if (vB.isAtEnd(robot.odometry.currentPos)) {
                 break;
             }
@@ -225,7 +228,7 @@ public class RightAutoGrab extends LinearOpMode {
             telemetry(vB);
             robot.dashboard.update(robot.odometry.currentPos, vB.getVector(robot.odometry.currentPos).targetPos, runlist.get(runlist.size() - 1));
         }
-        wait(0.2, robot.odometry.currentPos);
+        wait(0.13, robot.odometry.currentPos);
     }
 
 

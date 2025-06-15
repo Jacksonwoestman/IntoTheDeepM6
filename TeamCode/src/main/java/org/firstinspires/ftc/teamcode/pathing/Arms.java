@@ -7,7 +7,7 @@ public class Arms {
 
     public static int vertBucket = 2050;
     public static int vertSpecimenPlace = 480;
-    public static int vertAfterReset = 460;
+    public static int vertAfterReset = 475;
     public static int vertInit = 100;
     public static int vertInitAuto = 127;
 
@@ -31,10 +31,10 @@ public class Arms {
     public static double intakeArmUp = 0.78;
     public static double intakeArmLaunch = 0.66;
 
-    public static double intVel1 = 0.85;
-    public static double intVel2 = -0.3;
+    public static double intVel1 = 0.82;
+    public static double intVel2 = -0.4;
     public static double intVel3 = 0.5;
-    public static double intVel4 = 0.5;
+    public static double intVel4 = 0.7;
 
     public static double intakeTime1 = 0.1;
 
@@ -44,21 +44,24 @@ public class Arms {
     public static double outtakeGrabRelease = 0.5;
     public static double outtakeGrabReady = 0.47;
 
-    public static double outtakeGrabGrab = 0.4565;
+    public static double outtakeGrabGrab = 0.452;
 
     public static double outtakeWristInit = 0.192;
     public static double outtakeWrist180 = 0.854;
     public static double outtakeWristHalf = 0.5;
 
-    public static double outtakeArmStart = 0.25-0.095;
+    public static double outtakeArmStart = 0.25-0.105;
 
     public static double outtakeArmInit = 0.020;
 
-    public static double outtakeArmSpecimenPlace = 0.255;
+    public static double outtakeArmSpecimenPlace = 0.258;
 
-    public static double outtakeArmBucket = 0.76-0.095;
+    public static double outtakeArmBucket = 0.69069;
 
-    public static double outtakeArmSpecimenGrab = 1-0.06;
+    public static double outtakeArmSpecimenGrab = 1-0.08;
+
+    public static double outtakeArmPark = 0.74-0.095+0.04;
+
 
 
 
