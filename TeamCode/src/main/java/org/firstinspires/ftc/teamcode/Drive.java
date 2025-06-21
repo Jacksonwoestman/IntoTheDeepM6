@@ -151,6 +151,12 @@ public class Drive {
     outtakeWrist.setPosition(Arms.outtakeWrist180);
   }
 
+  public void bucketReady(int bucketPos) {
+    vertSlide(bucketPos);
+    outtakeArm(Arms.outtakeArmBucket);
+    outtakeWrist.setPosition(Arms.outtakeWrist180);
+  }
+
 
   public void vertSlide(int targetPos) {
     lVert.setTargetPosition(targetPos);
@@ -247,7 +253,7 @@ public class Drive {
   }
 
   public void updateTelemetry() {
-    Pos2D curEncPos = new Pos2D(-lEncoder.getCurrentPosition(), rEncoder.getCurrentPosition(), bEncoder.getCurrentPosition());
+    Pos2D curEncPos = new Pos2D(-lEncoder.getCurrentPosition(), rEncoder.getCurrentPosition(), -bEncoder.getCurrentPosition());
     odometry.updateTelemetry(curEncPos);
 
 
@@ -272,7 +278,7 @@ public class Drive {
 
     if (red > 100 && red > green + 50 && red > blue + 50) {
       color = 1;  // Red
-    } else if (green > 110 && green > red + 55 && green > blue + 55) {
+    } else if (green > 130 && green > red + 60 && green > blue + 60) {
       color = 2;  // Green
     } else if (green < 100 && green > red + 20 && green > blue + 110) {
       color = 3;  // Blue
@@ -317,7 +323,7 @@ public class Drive {
 
     lEncoder = hardwareMap.get(DcMotorEx.class, "BR");
     rEncoder = hardwareMap.get(DcMotorEx.class, "FL");
-    bEncoder = hardwareMap.get(DcMotorEx.class, "BL");
+    bEncoder = hardwareMap.get(DcMotorEx.class, "FR");
     lEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     rEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     bEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

@@ -33,6 +33,37 @@ public class VectorBuilder {
         initVectors();
     }
 
+    public VectorBuilder(ArrayList<Pos2D>[] bPoints) {
+        b = DriveConstants.powerBegin;
+        x = DriveConstants.powerMax;
+        e = DriveConstants.powerEnd;
+        int numPts = 0;
+        ptsPerCm = 1;
+        points = new ArrayList<Pos2D>();
+        vectors = new ArrayList<Vector>();
+        initPoints = bPoints[0];
+        for(int j = 0; j < bPoints.length; j++) {
+            bezier = new Bezier(bPoints[j]);
+            numPts = (int)(bezier.length * ptsPerCm);
+            if(numPts == 0) {numPts = 1;}
+
+
+            for(int i = 0; i <= numPts - 1; i++) {points.add(bezier.getPosAtTime(i/(double)(numPts-1)));}
+            for (int i = 0; i <= numPts - 1; i++) {
+                if (i == numPts - 1) {
+                    vectors.add(new Vector(points.get(i), points.get(i), getSpeed(i/(double)(numPts-1))));
+                } else {
+                    Pos2D currentPos = points.get(i);
+                    Pos2D targetPos = points.get(i + 1);
+                    vectors.add(new Vector(currentPos, targetPos, getSpeed(i/(double)(numPts-1))));
+                }
+            }
+        }
+
+
+        initVectors();
+    }
+
     public VectorBuilder(ArrayList<Pos2D> bPoints, double b, double x, double e) {
         this.b = b;
         this.x = x;
@@ -64,8 +95,8 @@ public class VectorBuilder {
     }
 
     public Vector getVector(Pos2D currentPos) {
-        if(currentPos.distance(initPoints.get(initPoints.size() - 1)) < 5) {isNearEnd = true;}
-        if(isNearEnd) {return new Vector(initPoints.get(initPoints.size() -1));}
+        if(currentPos.distance(points.get(points.size() - 1)) < 5) {isNearEnd = true;}
+        if(isNearEnd) {return new Vector(points.get(points.size() -1));}
         return vectors.get(closestPoint(currentPos));
     }
 

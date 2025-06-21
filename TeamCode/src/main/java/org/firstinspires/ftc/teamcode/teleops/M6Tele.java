@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.teleops;
 import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Drive;
 import org.firstinspires.ftc.teamcode.pathing.Arms;
@@ -14,16 +16,19 @@ import org.firstinspires.ftc.teamcode.pathing.VectorBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-@TeleOp(name = "M2 Teleop Uno")
+@Disabled
+@TeleOp(name = "M2 Teleop")
 public class M6Tele extends LinearOpMode {
-    Drive robot;
 
+    Drive robot;
+    ;
     double Speed;
     int specimen = 0;
     int observe = 0;
     VectorBuilder vB = null;
     boolean isRunningVB = false;
+
+    int bucketPos = Arms.vertBucket;
 
 
     boolean isResetting = false;
@@ -90,11 +95,18 @@ public class M6Tele extends LinearOpMode {
 
                 drive();
 
-
+                if (gamepad1.dpad_up) {}
                 if (gamepad1.b || gamepad2.b) {isResetting = true; resetTime = getRuntime();}
                 if (gamepad2.a && !gamepad2.right_bumper) robot.specimenGrab();
-                if (gamepad2.y) {robot.bucketReady(); robot.vertSlide(Arms.vertBucket);}
+                if (gamepad2.y && !isResetting && !isResetting2) {robot.bucketReady(bucketPos); robot.vertSlide(Arms.vertBucket);}
                 if (gamepad2.x && !gamepad2.right_bumper) {isSpecimening = true; specimenTime = getRuntime();}
+
+                if(gamepad1.left_trigger > 0.1) {
+                    bucketPos = 725;
+                }
+                if(gamepad1.right_trigger >0.1) {
+                    bucketPos = Arms.vertBucket;
+                }
 
                 if ((gamepad2.b && gamepad2.right_bumper) || gamepad1.x) color = 1;
                 if ((gamepad2.x && gamepad2.right_bumper) || gamepad1.y) color = 2;
@@ -122,9 +134,23 @@ public class M6Tele extends LinearOpMode {
                 if (gamepad2.dpad_down && gamepad2.right_stick_button) robot.vertSlide(Arms.vertHang);
 
                 if (gamepad2.right_stick_y != 0 && gamepad2.dpad_down) robot.vertSlideStick(gamepad2.right_stick_y);
-                if (gamepad2.left_stick_y != 0 && gamepad2.dpad_down) robot.horzSlideStick(gamepad2.left_stick_y);
+                if (gamepad2.left_stick_y != 0) robot.horzSlideStick(gamepad2.left_stick_y);
                 if (gamepad2.left_stick_button) robot.grabReady();
                 if (gamepad2.right_stick_button && !gamepad2.dpad_down) robot.grabReadyHalf();
+
+                if(gamepad1.dpad_up) {
+                    robot.mVert.setTargetPosition(Arms.vertInit);
+                    robot.lVert.setTargetPosition(Arms.vertInit);
+                    robot.rVert.setTargetPosition(Arms.vertInit);
+                    robot.mVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.lVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.rVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robot.lVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.rVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.mVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+                }
 
 
 
@@ -167,21 +193,21 @@ public class M6Tele extends LinearOpMode {
 
                 }
                 if(isResetting2) {
-                    if(getRuntime() > 1.3 + resetTime2) {
+                    if(getRuntime() > 1 + resetTime2) {
                         isResetting = false;
                         isResetting2 = false;
                         robot.intake.setPower(0);
 
-                    } else if (getRuntime() > 0.8 + resetTime2) {
+                    } else if (getRuntime() > 0.5 + resetTime2) {
                         robot.intakeArm.setPosition(Arms.intakeArmLaunch);
                         robot.vertSlide(Arms.vertAfterReset);
                         robot.intake.setPower(Arms.intVel2);
-                        robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
 
-                    } else if (getRuntime() > 0.3 + resetTime2) {
-                        robot.outtakeGrab.setPosition(Arms.outtakeGrabStart);
 
                     } else if (getRuntime() > 0.2 + resetTime2) {
+                        robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
+
+                    } else if (getRuntime() > 0.1 + resetTime2) {
                         robot.intake.setPower(Arms.intVel4);
 
                     }
@@ -191,8 +217,9 @@ public class M6Tele extends LinearOpMode {
 
                     robot.intake.setPower(0);
                     robot.resetStuff();
+                    robot.intakeArm.setPosition(Arms.intakeArmLaunch);
                     isResettingforSpecimen = false;
-                }
+                    }
 
 
               /*  if (isLaunching) {
@@ -251,14 +278,14 @@ public class M6Tele extends LinearOpMode {
     }
 
     private void drive() {
-        Speed = 1;
+        if (gamepad1.left_bumper) Speed = 0.4;
+        else if (gamepad1.right_bumper) Speed = 0.7;
+        else Speed = 1;
 
-        double Speed_Rot = 0, Speed_X = 0, Speed_Y = 0;
-        if(!gamepad2.dpad_down) {
-            Speed_Rot = -gamepad2.right_stick_x;
-            Speed_X = -gamepad2.left_stick_x;
-            Speed_Y = -gamepad2.left_stick_y;
-        }
+        double Speed_Rot = -gamepad1.right_stick_x;
+        double Speed_X = -gamepad1.left_stick_x;
+        double Speed_Y = -gamepad1.left_stick_y;
+
         double fR = Math.min(Math.max(Speed_Y + Speed_X + Speed_Rot, -Speed), Speed);
         double bR = Math.min(Math.max((Speed_Y - Speed_X) + Speed_Rot, -Speed), Speed);
         double fL = Math.min(Math.max((Speed_Y - Speed_X) - Speed_Rot, -Speed), Speed);

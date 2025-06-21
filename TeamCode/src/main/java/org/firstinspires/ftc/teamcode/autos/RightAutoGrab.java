@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.autos;
 import android.widget.GridLayout;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.robot.Robot;
 
@@ -18,7 +19,7 @@ import org.firstinspires.ftc.teamcode.pathing.VectorBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
+@Disabled
 @Autonomous(name = "RightAuto")
 public class RightAutoGrab extends LinearOpMode {
     Drive robot;
@@ -72,7 +73,8 @@ public class RightAutoGrab extends LinearOpMode {
 
         telemetry.addData(">", "Touch Play to start OpMode");
         robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
-       // robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
+        robot.outtakeWrist.setPosition(Arms.outtakeWristHalf);
+        //robot.outtakeArm(Arms.outtakeArmSpecimenPlace);
         telemetry.update();
 
 
@@ -98,11 +100,10 @@ public class RightAutoGrab extends LinearOpMode {
         //Left Color Stuff
 
         runList(GoLColor1);
-        robot.lHorz.setPosition(Arms.lHorzHalf);
-        robot.rHorz.setPosition(Arms.rHorzHalf);
+        robot.horzSlideFraction(0.7);
         robot.intake.setPower(0.5);
         runList(GoLColor2);
-       // robot.resetOuttakeStuff();
+        robot.resetOuttakeStuffSpecimen();
         intake();
 
         runList(GoLColor3);
@@ -120,8 +121,7 @@ public class RightAutoGrab extends LinearOpMode {
         outtake();
 
 
-        robot.lHorz.setPosition(Arms.lHorzInit);
-        robot.rHorz.setPosition(Arms.rHorzInit);
+        robot.horzSlide(Arms.lHorzInit, Arms.rHorzInit);
         robot.intakeArm.setPosition(Arms.intakeArmInit);
         Thread.sleep(300);
         runList(PreSpecimenPickupfromR);
@@ -142,19 +142,19 @@ public class RightAutoGrab extends LinearOpMode {
 
 
 
-        //runList(SpecimenPickup);
+        runList(SpecimenPickup);
 
     }
 
     private void observeReadyCycle() throws InterruptedException {
         robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
         Thread.sleep(300);
-        specimenReady();
+       specimenReady();
 
         runListNoWait(specimen());
 
-        robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
-        robot.specimenGrab();
+       robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
+       robot.specimenGrab();
 
         Thread.sleep(100);
         ArrayList<Pos2D> pickup = new ArrayList<>(Arrays.asList(robot.odometry.currentPos, Points.observeGrab));
@@ -186,12 +186,14 @@ public class RightAutoGrab extends LinearOpMode {
 
     private void intake() throws InterruptedException {
         while(robot.color() == 0) {
-            robot.lHorz.setPosition(Arms.lHorzOut);
-            robot.rHorz.setPosition(Arms.rHorzOut);
-            robot.intake.setPower(0.6);
+            robot.horzSlide(Arms.lHorzOut, Arms.rHorzOut);
+
+
+            robot.intake.setPower(0.9);
             robot.intakeArm.setPosition(Arms.intakeArmGrab);
         }
         robot.intake.setPower(0);
+        robot.horzSlideFraction(0.8);
         robot.intakeArm.setPosition(Arms.intakeArmLaunch);
 
     }
