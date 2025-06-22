@@ -47,6 +47,7 @@ public class RightAuto5 extends LinearOpMode {
     ArrayList<Pos2D> SpecimenPickupfromR = new ArrayList<>(Arrays.asList(Points.PreobserveGrab, Points.observeGrab));
     ArrayList<Pos2D> SpecimenDeliver= new ArrayList<>(Arrays.asList(Points.observeGrab, Points.RSpecimenPreDeliver));
     ArrayList<Pos2D> SpecimenPickup = new ArrayList<>(Arrays.asList(Points.RSpecimenDeliver, Points.observeGrab));
+    ArrayList<Pos2D> prePickup = new ArrayList<>(Arrays.asList(Points.RSpecimenDeliver, Points.PreObservePickup));
     ArrayList<Pos2D> SpecimenPickup1 = new ArrayList<>(Arrays.asList(Points.RColor5, Points.observeGrabR));
     ArrayList<Pos2D> SpecimenDeliver1 = new ArrayList<>(Arrays.asList(Points.observeGrabR, Points.RSpecimenDeliver));
 
@@ -151,7 +152,10 @@ public class RightAuto5 extends LinearOpMode {
         robot.specimenGrab();
 
         Thread.sleep(40);
+        runList(prePickup);
+        Thread.sleep(100);
         specimenGrab++;
+
         Pos2D targetPos = new Pos2D(Points.observeGrab.x-0.95 * specimenGrab, Points.observeGrab.y, Points.observeGrab.theta);
 
         ArrayList<Pos2D> pickup = new ArrayList<>(Arrays.asList(robot.odometry.currentPos, targetPos));

@@ -177,7 +177,7 @@ public class M6Tele_Uno extends LinearOpMode {
                     } else if (getRuntime() > 0.5 + resetTime2) {
                         robot.intakeArm.setPosition(Arms.intakeArmLaunch);
                         robot.vertSlide(Arms.vertAfterReset);
-                        robot.intake.setPower(Arms.intVel2);
+                        robot.intake.setPower(-0.7);
                     } else if (getRuntime() > 0.4 + resetTime2) {
                         robot.outtakeGrab.setPosition(Arms.outtakeGrabStart);
 

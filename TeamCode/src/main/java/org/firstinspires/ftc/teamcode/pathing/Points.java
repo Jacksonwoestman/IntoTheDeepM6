@@ -8,8 +8,8 @@ public class Points {
     public final static Pos2D initPoseRight = new Pos2D(21, 135.5, 2*(Math.PI));
 
     public final static Pos2D RNeutral = new Pos2D(52.5,318,-0.24);
-    public final static Pos2D MNeutral = new Pos2D(49,315.5,0.18);
-    public final static Pos2D LNeutral = new Pos2D(57,315,0.6);
+    public final static Pos2D MNeutral = new Pos2D(49,317,0.18);
+    public final static Pos2D LNeutral = new Pos2D(57,314.5,0.6);
 
     public final static Pos2D BasketDeliver = new Pos2D(38,318,-Math.PI/4);
     public final static Pos2D LeftParkStart = new Pos2D(180,300,-(Math.PI*3)/2);
@@ -22,8 +22,8 @@ public class Points {
     public final static Pos2D LeftSpecimenGrabControl = new Pos2D(140,290,-(Math.PI)/2);
     public final static Pos2D observeGrabR = new Pos2D(27, 35, 2*Math.PI);
 
-    public final static Pos2D observeGrab = new Pos2D(26.5, 75, 2*Math.PI);
-    public final static Pos2D PreobserveGrab = new Pos2D(30, 75, 2*Math.PI);
+    public final static Pos2D observeGrab = new Pos2D(26.5, 82, 2*Math.PI);
+    public final static Pos2D PreobserveGrab = new Pos2D(11, 82, 2*Math.PI);
     public final static Pos2D observeGrabTele = new Pos2D(46, 75, Math.PI);
 
     public final static Pos2D specimenSubPickup = new Pos2D(150, 115, Math.PI/2);
@@ -39,21 +39,22 @@ public class Points {
     public final static Pos2D SpecimenPreDeliverTele = new Pos2D(65,170, Math.PI);
 
     public final static Pos2D LColor1 = new Pos2D(0,90,(3*(Math.PI)/2));
-    public final static Pos2D LColor3 = new Pos2D(LColor1.x + 160, LColor1.y - 17, LColor1.theta);
-    public final static Pos2D LColor5 = new Pos2D(LColor1.x + 55, LColor1.y - 35, LColor1.theta);
+    public final static Pos2D LColor3 = new Pos2D(LColor1.x + 165, LColor1.y - 14, LColor1.theta);
+    public final static Pos2D LColor5 = new Pos2D(LColor1.x + 55, LColor1.y - 40, LColor1.theta);
 
 
     public final static Pos2D MColor1 = new Pos2D(50,67, (3*(Math.PI)/2));
-    public final static Pos2D MColor3 = new Pos2D(MColor1.x + 190, MColor1.y - 35, MColor1.theta);
-    public final static Pos2D MColor5 = new Pos2D(MColor1.x , MColor1.y - 30, MColor1.theta);
+    public final static Pos2D MColor3 = new Pos2D(MColor1.x + 220, MColor1.y - 33, MColor1.theta);
+    public final static Pos2D MColor5 = new Pos2D(MColor1.x , MColor1.y - 32, MColor1.theta);
 
 
     public final static Pos2D RColor1 = new Pos2D(50,42, (3*(Math.PI)/2));
-    public final static Pos2D RColor3 = new Pos2D(RColor1.x + 185, RColor1.y - 30, RColor1.theta);
-    public final static Pos2D RColor5 = new Pos2D(RColor1.x , RColor1.y - 14, RColor1.theta);
+    public final static Pos2D RColor3 = new Pos2D(RColor1.x + 240, RColor1.y - 27.5, RColor1.theta);
+    public final static Pos2D RColor5 = new Pos2D(RColor1.x , RColor1.y - 17, RColor1.theta);
 
 
     public final static Pos2D LColorAtG = new Pos2D(72,95,5.44809);
+
     public final static Pos2D LColorObserveG = new Pos2D(65,80,3.6);
     //7/4 = grab
     public final static Pos2D MColorAtG = new Pos2D(67,72, 5.5562);
