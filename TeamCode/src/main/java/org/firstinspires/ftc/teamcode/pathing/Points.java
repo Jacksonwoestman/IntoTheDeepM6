@@ -7,11 +7,11 @@ public class Points {
     public final static Pos2D initPosLeft = new Pos2D(20, 275, -Math.PI/2);
     public final static Pos2D initPoseRight = new Pos2D(21, 135.5, 2*(Math.PI));
 
-    public final static Pos2D RNeutral = new Pos2D(52.5,318,-0.24);
+    public final static Pos2D RNeutral = new Pos2D(52.5,315,-0.24);
     public final static Pos2D MNeutral = new Pos2D(49,317,0.18);
-    public final static Pos2D LNeutral = new Pos2D(57,314.5,0.6);
+    public final static Pos2D LNeutral = new Pos2D(53,314.5,0.6);
 
-    public final static Pos2D BasketDeliver = new Pos2D(38,318,-Math.PI/4);
+    public final static Pos2D BasketDeliver = new Pos2D(37,319.5,-Math.PI/4);
     public final static Pos2D LeftParkStart = new Pos2D(180,300,-(Math.PI*3)/2);
     public final static Pos2D LeftParkEnd = new Pos2D(150,238,-(Math.PI*3)/2);
     public final static Pos2D LeftGrabStart = new Pos2D(180,320,-(Math.PI*3)/2);

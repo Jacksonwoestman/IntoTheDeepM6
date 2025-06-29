@@ -210,7 +210,7 @@ public class LeftAutoBasket extends LinearOpMode {
             robot.intake.setPower(0.2);
             robot.outtakeGrab.setPosition(Arms.outtakeGrabReady);
 
-            Thread.sleep(100);
+            Thread.sleep(150);
             robot.outtakeGrab.setPosition(Arms.outtakeGrabGrab);
 
             Thread.sleep(150);
@@ -236,7 +236,7 @@ public class LeftAutoBasket extends LinearOpMode {
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         robot.outtakeArm(Arms.outtakeArmBucket);
         robot.horzSlideFraction(0.6);
-        Thread.sleep(125);
+        Thread.sleep(240);
         robot.intakeArm.setPosition(Arms.intakeArmGrab);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
         Thread.sleep(150);
@@ -254,7 +254,7 @@ public class LeftAutoBasket extends LinearOpMode {
         robot.outtakeWrist.setPosition(Arms.outtakeWrist180);
         robot.outtakeArm(Arms.outtakeArmBucket);
         robot.horzSlideFraction(0.60);
-        Thread.sleep(250);
+        Thread.sleep(350);
         robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
         robot.intakeArm.setPosition(Arms.intakeArmGrab);
         Thread.sleep(120);

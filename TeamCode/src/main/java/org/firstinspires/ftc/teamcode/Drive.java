@@ -65,7 +65,7 @@ public class Drive {
     outtakeArm(Arms.outtakeArmInit);
     outtakeWrist.setPosition(Arms.outtakeWristInit);
     outtakeGrab.setPosition(Arms.outtakeGrabRelease);
-    vertSlide(Arms.vertAfterReset);
+    vertSlide(200);
 
   }
   public void resetOuttakeExtHorz() {

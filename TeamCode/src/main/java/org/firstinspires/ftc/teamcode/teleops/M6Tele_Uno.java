@@ -32,6 +32,9 @@ public class M6Tele_Uno extends LinearOpMode {
     boolean isGrabbing = false;
     boolean isGrabbingforSpecimen = false;
     boolean isSpecimening = false;
+    boolean isResetting13193 = false;
+    boolean isResetting13193TWO = false;
+    boolean samplePlaced = false;
     double specimenTime = 0;
 
     float[] hsvValues = new float[3];
@@ -85,8 +88,11 @@ public class M6Tele_Uno extends LinearOpMode {
                 if (gamepad1.dpad_up) Arms.vertSpecimenPlace += 1;
                 if (gamepad1.dpad_down) Arms.vertSpecimenPlace -= 1;
 
-                if (gamepad1.b || gamepad2.b) {
+                if ((gamepad1.b || gamepad2.b) && (samplePlaced==false)) {
                     isResetting = true;
+                    resetTime = getRuntime();
+                }else if ((gamepad1.b || gamepad2.b) && (samplePlaced==true)){
+                    isResetting13193 = true;
                     resetTime = getRuntime();
                 }
                 if (gamepad2.a && !gamepad2.right_bumper) robot.specimenGrab();
@@ -110,8 +116,10 @@ public class M6Tele_Uno extends LinearOpMode {
                 }
                 if (gamepad2.left_trigger > 0.1) robot.intake.setPower(-1);
 
-                if (gamepad2.left_bumper || gamepad1.right_stick_button)
+                if (gamepad2.left_bumper || gamepad1.right_stick_button) {
                     robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
+                    samplePlaced = true;
+                }
 
                 if (gamepad2.right_bumper) {
                     robot.grab(Arms.intVel1);
@@ -134,7 +142,11 @@ public class M6Tele_Uno extends LinearOpMode {
                 if (gamepad2.left_stick_y != 0 && gamepad2.dpad_down)
                     robot.horzSlideStick(gamepad2.left_stick_y);
 
-                if (gamepad2.left_stick_button) robot.grabReady();
+                if (gamepad2.left_stick_button) {
+                    robot.grabReady();
+                    samplePlaced=false;
+                }
+
                 if (gamepad2.right_stick_button && !gamepad2.dpad_down) robot.grabReadyHalf();
 
                 // Reset logic after color match
@@ -188,6 +200,45 @@ public class M6Tele_Uno extends LinearOpMode {
                     }
                 }
 
+                if (isResetting13193) {
+                    boolean stillDetectsBlock = detectColor(hsvValues).equals(targetColorString);
+                    robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
+                    robot.intake.setPower(Arms.intVel2);
+                    robot.resetStuff();
+
+                    if (stillDetectsBlock) {
+                        if (resetTime + Arms.intakeTime1 < getRuntime())
+                            robot.intake.setPower(0.48);
+                    } else {
+                        robot.intake.setPower(0.48);
+                        robot.resetStuff();
+
+                        isResetting13193TWO = true;
+                        resetTime2 = getRuntime();
+                        isResetting13193 = false;
+                    }
+                }
+
+                if (isResetting13193TWO) {
+                    if (getRuntime() > 0.85 + resetTime2) {
+                        isResetting13193 = false;
+                        isResetting13193TWO = false;
+                        robot.intake.setPower(0);
+                        robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
+                    } else if (getRuntime() > 0.5 + resetTime2) {
+                        robot.intakeArm.setPosition(Arms.intakeArmLaunch);
+                        robot.vertSlide(Arms.vert13193);
+                        robot.intake.setPower(-0.7);
+                    } else if (getRuntime() > 0.4 + resetTime2) {
+                        robot.outtakeGrab.setPosition(Arms.outtakeGrabRelease);
+
+
+                    } else if (getRuntime() > 0.15 + resetTime2) {
+                        robot.vertSlide(Arms.vert13193);
+                        robot.intake.setPower(0.48);
+                    }
+                }
+
                 if (isResettingforSpecimen) {
                     boolean stillDetectsBlock = detectColor(hsvValues).equals(targetColorString);
                     robot.intake.setPower(0);
@@ -226,6 +277,7 @@ public class M6Tele_Uno extends LinearOpMode {
     }
 
     private void telemetry() {
+        telemetry.addData("samplw placed", samplePlaced);
         telemetry.addData("Target Color Number", color);
         telemetry.addData("Vertical Slide Pos", robot.vertSlidePos());
         telemetry.addData("LSlide Pos:", robot.lVertSlidePos());

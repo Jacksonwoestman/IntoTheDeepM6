@@ -6,11 +6,12 @@ import com.acmerobotics.dashboard.config.Config;
 public class Arms {
 
 
-        public static int vertBucket = 2080;
+        public static int vertBucket = 2145;
         public static int vertSpecimenPlace = 480;
         public static int vertAfterReset = 460;
         public static int vertInit = 52;
         public static int vertInitAuto = 40;
+        public static int vert13193 = 165;
 
         public static int vertBottom = 0;
         public static int vertHang = 2025;
@@ -61,7 +62,7 @@ public class Arms {
 
         public static double outtakeArmSpecimenGrab = 1-0.06;
 
-        public static double outtakeArmPark = 0.74-0.095+0.04;
+        public static double outtakeArmPark = 0.71;
 
 
 
